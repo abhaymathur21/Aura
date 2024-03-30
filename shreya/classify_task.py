@@ -37,17 +37,24 @@ def chat():
     classification_prompt = [
         f"""
           Given a raw text input to a language model select the task best suited for the input, depending on what the user seems to need: 
-          'calculator' if the user asks for any mathematical calculations that require a calculator (example: addition, subtraction, multiplication, division, sin, cosine, standard deviation, etc)
-          'command' if the user asks to execute a command prompt or a code
-          'email' if the user asks to send an email
+          if the user asks for any mathematical calculations that require a calculator (example: addition, subtraction, multiplication, division, sin, cosine, standard deviation, etc), 
+            identify task_type based on context: "new event", "delete event", "check events", "edit event", "check date"
+          answer format: 'calculator', task_type
+          
+          if the user asks to execute a command prompt or a code:
+          answer format: 'command_execute', input_string
+          
+          if the user asks to send an email:
+            identify task_type: 'send', 'delete', 'check_inbox'
+            in case of task_type 'send', identify the message
+          answer format:'email' , task_type, message (if any)
+          
           'message' if the user asks to send a text message
           'api' if user asks for current news, sports events or the weather
           'calendar' if user asks to edit their schedule (example: add or delete tasks for a day or hour, etc)
           'web' if user specifically asks to search the web for something
           'chat' if none of the above tasks apply
           
-          answer in the following format:
-          task 
           given user input: {input_string}
           """
     ]
@@ -58,7 +65,7 @@ def chat():
         print("calculator")
 
     elif "command" in response.text:
-        print("command")
+        print("command_execute")
         
     elif "email" in response.text:
         print("email")
