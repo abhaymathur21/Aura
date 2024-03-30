@@ -1,0 +1,11 @@
+.animation
+{
+    z-index: 0 !important;
+}
+
+.typewriter {
+    z-index: 1;
+    
+    height: 100vh;
+    margin: 10em 30em ;
+}

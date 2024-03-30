@@ -1,0 +1,51 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.nav
+{
+  background-color: #0B0B0B !important;
+}
+
+.button
+{
+  background-color: #462893;
+  color: white;
+}
+
+.button:hover
+{
+  background-color: white !important;
+  color:#462893
+}
+
+.typewriter
+{
+  position: fixed;
+  top: 30%
+}
+
+
+.typewriter-text {
+  font-size: 3em; /* Adjust the font size as needed */
+  color: rgb(255, 255, 255); /* Text color */
+}
+
+.typewriter-cursor {
+  border-right: .15em solid white; /* Cursor color */
+}
+
