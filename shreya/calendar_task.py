@@ -81,7 +81,7 @@ def top_ten(service):
         print(f"An error occurred: {error}")
 
 
-def add_event(service, event_name, start_datetime, end_datetime=None, is_all_day=False, location=None):
+def add_event(service, event_name, start_datetime, end_datetime=None, is_all_day=False, location=None, recurrence = "does not repeat"):
     """
     Adds a new event to the user's Google calendar.
 
@@ -109,7 +109,7 @@ def add_event(service, event_name, start_datetime, end_datetime=None, is_all_day
         event["location"] = location
 
     # Set "recurrence" to 'does not repeat' (this is the default behavior, but added for clarity)
-    event["recurrence"] = ["does not repeat"]
+    event["recurrence"] = recurrence
 
     try:
         event = service.events().insert(calendarId="primary", body=event).execute()
@@ -117,7 +117,174 @@ def add_event(service, event_name, start_datetime, end_datetime=None, is_all_day
     except HttpError as error:
         print(f"An error occurred: {error}")
 
+# def edit_event(service, event_name, new_event_name=None, new_start_datetime=None, new_end_datetime=None):
+#     """
+#     Edits an existing event on the user's Google calendar based on the event name.
 
+#     Args:
+#         service: The Google Calendar API service object.
+#         event_name (str): The name of the event to be edited.
+#         new_event_name (str, optional): The new name of the event. Defaults to None.
+#         new_start_datetime (str, optional): The new start date and time of the event in ISO 8601 format. Defaults to None.
+#         new_end_datetime (str, optional): The new end date and time of the event in ISO 8601 format. Defaults to None.
+#     """
+
+#     try:
+#         now = datetime.datetime.utcnow().isoformat() + "Z"  # 'Z' indicates UTC time
+#         events_result = (
+#             service.events()
+#             .list(
+#                 calendarId="primary",
+#                 timeMin=now,
+#                 maxResults=10,
+#                 singleEvents=True,
+#                 orderBy="startTime",
+#             )
+#             .execute()
+#         )
+#         events = events_result.get("items", [])
+
+#         # Find the event to edit by its name
+#         event_to_edit = None
+#         for event in events:
+#             if event.get("summary") == event_name:
+#                 event_to_edit = event
+#                 break
+
+#         if event_to_edit is None:
+#             print("Event not found.")
+#             return
+
+#         # Print the event details for debugging
+#         print("Event to edit:")
+#         print(event_to_edit)
+
+#         # Create a copy of the event with updated details
+#         updated_event = {
+#             'summary': new_event_name if new_event_name is not None else event_to_edit['summary'],
+#             'start': {
+#                 'dateTime': new_start_datetime if new_start_datetime is not None else event_to_edit['start']['dateTime']
+#             },
+#             'end': {
+#                 'dateTime': new_end_datetime if new_end_datetime is not None else event_to_edit['end']['dateTime']
+#             }
+#         }
+
+#         # Call the patch API to modify the event
+#         patched_event = service.events().patch(
+#             calendarId='primary',
+#             eventId=event_to_edit['id'],
+#             body=updated_event
+#         ).execute()
+
+#         print(f"Event updated: {patched_event.get('htmlLink')}")
+
+#     except HttpError as error:
+#         print(f"An error occurred: {error}")
+
+
+# if __name__ == "__main__":
+#     service = authenticate()
+
+#     # Example usage:
+#     top_ten(service)  # Uncomment to view upcoming events
+
+#     # Get event details from the user
+#     event_name = input("Enter the event name to edit: ")
+#     new_event_name = input("Enter the new event name (press Enter to keep it unchanged): ")
+#     new_start_datetime = input("Enter the new start date and time in YYYY-MM-DDTHH:MM:SSZ format (press Enter to keep it unchanged): ")
+#     new_end_datetime = input("Enter the new end date and time (optional, same as start time if not provided): ")
+
+#     # Edit the event using the edit_event function
+#     edit_event(service, event_name, new_event_name, new_start_datetime, new_end_datetime)
+
+def delete_event_by_name(service, event_name):
+    """
+    Deletes an event from the user's Google Calendar based on the event name.
+
+    Args:
+        service: The Google Calendar API service object.
+        event_name (str): The name of the event to be deleted.
+    """
+
+    try:
+        now = datetime.datetime.utcnow().isoformat() + "Z"  # 'Z' indicates UTC time
+        events_result = (
+            service.events()
+            .list(
+                calendarId="primary",
+                timeMin=now,
+                maxResults=10,
+                singleEvents=True,
+                orderBy="startTime",
+            )
+            .execute()
+        )
+        events = events_result.get("items", [])
+
+        # Find the event to delete by its name
+        event_to_delete = None
+        for event in events:
+            if event.get("summary") == event_name:
+                event_to_delete = event
+                break
+
+        if event_to_delete is None:
+            print("Event not found.")
+            return
+
+        # Call the delete API to remove the event
+        service.events().delete(calendarId='primary', eventId=event_to_delete['id']).execute()
+
+        print("Event deleted successfully.")
+
+    except HttpError as error:
+        print(f"An error occurred: {error}")
+
+
+def update_event(service, event_name, new_event_name=None, new_start_datetime=None, new_end_datetime=None, new_location = None, new_recurrence = None):
+  try:
+        now = datetime.datetime.utcnow().isoformat() + "Z"  # 'Z' indicates UTC time
+        events_result = (
+            service.events()
+            .list(
+                calendarId="primary",
+                timeMin=now,
+                maxResults=10,
+                singleEvents=True,
+                orderBy="startTime",
+            )
+            .execute()
+        )
+        events = events_result.get("items", [])
+
+        # Find the event by its name
+        for event in events:
+            if event.get("summary") == event_name:
+                # Extract event details
+                event_name = event.get("summary")
+                # print("event name: ",event_name)
+                if not new_event_name:
+                  new_event_name = event.get("summary")
+                  print("new event name: ",new_event_name)
+                if not new_start_datetime:
+                  new_start_datetime = event["start"].get("dateTime")
+                if not new_end_datetime:
+                  new_end_datetime = event["end"].get("dateTime")
+                if not new_location:
+                  new_location = event.get("location")
+                if not new_recurrence:
+                  new_recurrence = event.get("recurrence")
+        
+        delete_event_by_name(service, event_name)
+        add_event(service, new_event_name, new_start_datetime, new_end_datetime, location=new_location)
+
+        return None
+
+  except HttpError as error:
+      print(f"An error occurred: {error}")
+      return None
+  
 
 if __name__ == "__main__":
     service = authenticate()
@@ -126,16 +293,26 @@ if __name__ == "__main__":
     top_ten(service)  # Uncomment to view upcoming events
 
     # Get event details from the user
-    event_name = input("Enter the event name: ")
+    x = int(input("1 for add, 2 for delete, 3 for edit: "))
+    if x == 1:
+      event_name = input("Enter the event name: ")
+      start_datetime = input("Enter the start date and time in YYYY-MM-DDTHH:MM:SSZ format (press Enter to keep it unchanged): ")
+      end_datetime = input("Enter the end date and time (optional, same as start time if not provided): ")
+      location = input("Enter location (optional): ")
+      recurrence = input("Enter recurrence frequence(optional): ")
+      add_event(service, event_name, start_datetime, end_datetime=end_datetime, is_all_day=False, location=location, recurrence = recurrence)
+      
+    elif x==2:
+      event_name = input("Enter the event name to delete: ")
+      delete_event_by_name(service, event_name)
+      
+    elif x ==3:
+      event_name = input("Enter the event name to edit: ")
+      new_event = input("Enter the new event name: ")
+      start_datetime = input("Enter the new start date and time in YYYY-MM-DDTHH:MM:SSZ format (press Enter to keep it unchanged): ")
+      end_datetime = input("Enter the new end date and time (optional, same as start time if not provided): ")
+      location = input("Enter new location (optional): ")
+      recurrence = input("Enter recurrence frequence(optional): ")
+      update_event(service, event_name, new_event_name=new_event, new_start_datetime=start_datetime, new_end_datetime=end_datetime, new_location = location, new_recurrence = recurrence)
 
-    # Get start date and time (assuming ISO 8601 format for consistency)
-    start_datetime = input("Enter the start date and time in YYYY-MM-DDTHH:MM:SSZ format (e.g., 2024-03-31T10:00:00Z): ")
-
-    # Optional: Get end date and time (if different from start)
-    end_datetime = input(
-        "Enter the end date and time (optional, same as start time if not provided): "
-    )
-
-    # Create the event using the add_event function
-    add_event(service, event_name, start_datetime, end_datetime)
 
