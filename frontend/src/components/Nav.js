@@ -9,7 +9,7 @@ import { NavbarToggle } from 'flowbite-react/lib/esm/components/Navbar/NavbarTog
 // import '../styles/Home.css'
 // import x from '../Images/icon.png'
 // import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useState,useRef } from 'react'
 
 // import GavelIcon from '@mui/icons-material/Gavel';
 export default function Nav() {
@@ -33,7 +33,7 @@ export default function Nav() {
    
       
       <span className="self-center whitespace-nowrap text-xl text-white font-semibold dark:text-white color-[white]">
-         ByLaw      </span>
+        Aura      </span>
     </NavbarBrand>
     <div className="flex md:order-2">
       
