@@ -2,7 +2,14 @@ from flask import Flask, jsonify, request
 from pymongo.mongo_client import MongoClient
 from bson import json_util
 import json
-from chatbot import llm_model
+from chatbot import llm_model, rag_llm
+import base64
+import io
+import os
+from pydub import AudioSegment
+from keras.models import load_model
+from voice_recognition import classify_audio
+from functionalities.text_conversion import read_text_from_pdf, read_text_from_image
 
 app = Flask(__name__)
 
@@ -11,6 +18,11 @@ uri = "mongodb+srv://abhaymathur21:itsmeright@codeshastra.lxorakw.mongodb.net/?r
 # Create a new client and connect to the server
 client = MongoClient(uri)
 db = client["Accounts"]
+
+source_folder = "C:/Users/Abhay Mathur/Desktop"
+
+#define a global variable for personID every time voice is recognized
+personID = "1"
     
 @app.route("/add_person", methods=['POST'])
 def add_person():
@@ -34,6 +46,7 @@ def add_person():
     #     "personName": "person1",
     #     "userID": "1",
     #     "userName": "User1",
+    #     "password": "password",
     #     "chatHistory": "chat_history",
     #     "modelName": "model_name.h5"
     # }
@@ -42,23 +55,24 @@ def add_person():
     return message
 
 
-@app.route("/update_person", methods=['POST'])
-def update_person():
+@app.route("/update_person/<int:userID>", methods=['POST'])
+def update_person(userID):
     
     data = request.get_json()
     
-    collection = db["User"+data["userID"]]
+    chat_history = data["messages"]
+        
+    collection = db["User"+str(userID)]
     # Find the document to update
     
-    query = {"personID": data["personID"]}
+    query = {"personID": personID} #personID is a global variable that is set every time voice is recognized
     
     document = collection.find_one(query)
     print(document)
     if document:
         # Update the fields of the document
         document["personName"] = data["personName"] if data["personName"] else document["personName"]
-        document["chatHistory"] = data["chatHistory"] if data["chatHistory"] else document["chatHistory"]
-        document["modelName"] = data["modelName"] if data["modelName"] else document["modelName"]
+        document["chatHistory"] = data["chatHistory"] if chat_history else document["chatHistory"]
 
         document = {
             "$set": document
@@ -114,27 +128,83 @@ def delete_person():
     return message
     
 
-@app.route("/upload_pdf", methods=['POST'])
-def upload_pdf():
-    pass
+@app.route("/upload_file", methods=['POST'])
+def upload_file():
+    if 'file' not in request.files:
+        return jsonify({"error": "No file uploaded"}), 400
+    
+    file = request.files['file']
+    user_input = request.files['message']
+    
+    # Validate file
+    if file.filename == "":
+        return jsonify({"error": "No file selected"}), 400  
+
+    # Check if file type is supported
+    if not file.filename.lower().endswith((".png", ".jpg", ".jpeg", ".gif", ".pdf")):
+        return jsonify({"error": "Unsupported file format"}), 400
+
+    
+    if file.filename.lower().endswith(".pdf"):
+        
+        filename = os.path.join(source_folder, "Codeshastra X/backend/uploaded_pdfs", file.filename)
+        file.save(filename)
+        file_text = read_text_from_pdf(filename)
+        
+ 
+    if file.filename.lower().endswith((".png", ".jpg", ".jpeg", ".gif")):
+        
+        file_text = read_text_from_image(file) 
+        
+        
+    rag_response = rag_llm(user_input, file_text)
+        
+        
+@app.route("/audio", methods=['POST'])
+def audio():
+    
+    if 'audio' not in request.files:
+        return jsonify({"error": "No audio uploaded"}), 400
+    
+    blob_data= request.files['audio']
+    
+
+    # Decode base64 blob data if needed
+    audio_data = base64.b64decode(blob_data)
+    
+    # Convert blob data to AudioSegment
+    audio_seg = AudioSegment.from_file(io.BytesIO(audio_data), format='wav')
+    
+    model_path = "backend/audio_classification_model.h5"
+    model = load_model(model_path)
+    
+    prediction = classify_audio(audio_seg, model)
+    print(prediction)
+    
+    return jsonify({"classification": prediction}), 200
 
 
-@app.route("/upload_image", methods=['POST'])
-def upload_image():
-    pass
-
-
-@app.route("/llm_chatbot", methods=['POST'])
-def llm_chatbot():
+@app.route("/llm_chatbot/<int:userID>", methods=['POST'])
+def llm_chatbot(userID):
     
     data = request.get_json()
-    input_string = data.get('message')
+    input_string = data.get("message")
     
     print('Received string:', input_string)
     
-    response = llm_model(input_string)
+    collection = db["User"+str(userID)]
+    
+    query = {"personID": personID} #personID is a global variable that is set every time voice is recognized
+    
+    document = collection.find_one(query)
+    
+    chat_history = document["chatHistory"]
+    print(chat_history)
+
+    
+    response = llm_model(input_string, chat_history)
     # print(response)
-    return response
+    return jsonify({"data":response})
     
 
 if __name__ == '__main__':

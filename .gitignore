@@ -5,3 +5,4 @@ __pycache__
 token.json
 credentials.json
 .env
+audio_classification_model.h5
