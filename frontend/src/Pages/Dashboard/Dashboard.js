@@ -57,6 +57,7 @@ const Dashboard = () => {
         { user: "agent", message: "Hi there! How can I help you today?" },
         
       ]);
+    const [ResponseButton,SetResponseButton]= useState([]);
 
       const [input, setInput] = useState("");
 
@@ -83,11 +84,13 @@ const Dashboard = () => {
         if(domainFileRef !== null)
         {
             console.log(domainFileRef?.current?.files?.[0]);
+
        
       axios.post(
           "http://localhost:5000/upload_file",
           {
-              file: domainFileRef?.current?.files?.[0]
+              file: domainFileRef?.current?.files?.[0],
+              message:input
           },
           {
               headers: {
@@ -127,6 +130,8 @@ const Dashboard = () => {
             )
                 .then((res) => {
                     console.log("response Text", res.data);
+                   
+                    
                    setMessages(prevMessages => [...prevMessages, { user: 'agent', message: res.data }]);
                 })
                 .catch((err) => {
@@ -230,23 +235,35 @@ const Dashboard = () => {
       if (!browserSupportsSpeechRecognition) {
         return <span>Browser doesn't support speech recognition.</span>;
       }
+      let ResponseButtonData = [];
+
+      if (Object.keys(ResponseButton).length !== 0) {
+          ResponseButtonData = Object.keys(ResponseButton).map((key) => ({
+              label: ResponseButton[key],
+              taskId: key,
+          }));
+      }
+
 
     
-
-
-
 
   return (
     <>
     <Box sx={{backgroundColor:'black', minHeight: '100vh', display: 'flex', flexDirection: 'column'}}>
      {/* // Conditionally render the <ReactMic> component if voiceOn is true */}
-        <ReactMic 
-          record={isRecording}
-          className="sound-wave"
-          onStop={onStop}
-          // onData={onData}
-          strokeColor="#000000"
-        />
+       
+            <ReactMic 
+            record={isRecording}
+            // className="sound-wave"
+            onStop={onStop}
+            // onData={onData}
+            strokeColor="purple"
+            backgroundColor='black'
+            className ='line'
+            
+            />
+       
+        
       
     <NavDash/>
     {/* <p style={{color:'white'}}>{transcript}</p> */}
@@ -270,6 +287,9 @@ const Dashboard = () => {
           >
             {message.message}
           </Typography>
+
+       
+          
           </>
         ))}
         </Box>

@@ -86,3 +86,13 @@
 {
     background-color:'pink' !important
 } */
+
+
+.line
+{
+    position: fixed;
+    top: 50%;
+    width:100vw !important;
+    opacity: 0.35 !important;
+
+}
