@@ -1,4 +1,4 @@
-import { useState,useRef } from 'react'
+import { useState,useRef, useEffect } from 'react'
 import React from 'react'
 import NavDash from '../../components/NavDash'
 import { Box, Grid,Button,Typography } from '@mui/material'
@@ -16,6 +16,13 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import axios from 'axios'
+
+import MicOffIcon from '@mui/icons-material/MicOff';
+
+import { ReactMic } from 'react-mic';
+
+
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 
 
 const theme = createTheme({
@@ -51,10 +58,10 @@ const Dashboard = () => {
         
       ]);
 
-      const [open, setOpen] = React.useState(false);
-      const handleOpen = () => setOpen(true);
-      const handleClose = () => setOpen(false);
       const [input, setInput] = useState("");
+
+      const [voiceOn, setVoiceOn] = useState(true);
+      const [isRecording, setIsRecording] = useState(false);
 
     
     const domainFileRef = useRef(null);
@@ -97,12 +104,18 @@ const Dashboard = () => {
               
           })
         }
+        if (input == '' && transcript)
+        {
+            input = transcript
+        }
 
         if (input != '')
         {
+
             console.log("sending message")
+            setMessages(prevMessages => [...prevMessages, { user: 'user', message:input  }]);
             axios.post(
-                "http://localhost:5000/upload_text",
+                "http://localhost:5000/llm_chatbot",
                 {
                     message:input
                 },
@@ -126,19 +139,118 @@ const Dashboard = () => {
 
     }
 
+    
+
     const handleInput = (event) =>
     {
+        
         setInput(event.target.value)
+        
         console.log(input)
     }
+
+    useEffect(() => {
+        axios.post(
+            "http://localhost:5000/update_person",
+            {
+                messages : messages
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+        )
+            .then((res) => {
+                console.log("Done sent chat history");
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+       
+      }, [messages]);
     
+
+    const startRecording = () => {
+        setIsRecording(true);
+    };
+
+    const stopRecording = () => {
+        setIsRecording(false);
+    };
+
+    const onStop = (recordedBlob) => {
+        console.log('Recording stopped:', recordedBlob);
+        axios.post("http://localhost:5000/audio",
+        {
+            audio: recordedBlob
+        },
+        {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+        ) .then(() => {
+           console.log("sent Audio successfully")
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+    };
+
+    const {
+        transcript,
+        listening,
+        resetTranscript,
+        browserSupportsSpeechRecognition,
+        startListening,
+        stopListening
+
+      } = useSpeechRecognition();
+
+    const toggleMicrophone = () => {
+        setVoiceOn(prevState => !prevState);
+        if (voiceOn == true)
+        {
+            startRecording()
+            SpeechRecognition.startListening()
+
+        }
+        else
+        {
+            stopRecording()
+            SpeechRecognition.stopListening()
+        }
+
+    };
+
+
+
+
+      if (!browserSupportsSpeechRecognition) {
+        return <span>Browser doesn't support speech recognition.</span>;
+      }
+
+    
+
 
 
 
   return (
     <>
     <Box sx={{backgroundColor:'black', minHeight: '100vh', display: 'flex', flexDirection: 'column'}}>
+    {!voiceOn && ( // Conditionally render the <ReactMic> component if voiceOn is true
+        <ReactMic 
+          record={isRecording}
+          className="sound-wave"
+          onStop={onStop}
+          // onData={onData}
+          strokeColor="#000000"
+        />
+      )} 
     <NavDash/>
+    {/* <p style={{color:'white'}}>{transcript}</p> */}
+
     <Box sx={{flex: '1 0 auto', overflowY: 'auto'}}> 
         <Box className='scrollable-div' > 
 
@@ -175,7 +287,7 @@ const Dashboard = () => {
             id="chat"
             placeholder='Ask a Question ...'
             name='chat'
-            value={input}
+            value={input||transcript}
             onChange = {handleInput}
             className='search'
             fullWidth
@@ -186,10 +298,12 @@ const Dashboard = () => {
             
             </Grid>
 
-            <Grid item xs={1}>
-                <Button className='dash-button'><KeyboardVoiceIcon color='white' fontSize='large'/></Button>
+            <Grid item xs={1} >
+            
+
+                <Button className='dash-button' onClick={toggleMicrophone}>{voiceOn ? <KeyboardVoiceIcon color='white' fontSize='large' /> : <MicOffIcon color='white' fontSize='large' />}</Button>
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={2} >
                 <Button fullWidth className='dash-button' onClick={handleSubmit}>Submit</Button>
             </Grid>
         </Grid>
