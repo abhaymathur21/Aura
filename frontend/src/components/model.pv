@@ -1,0 +1,6 @@
+
+const porcupineModel = {
+  base64: './WakeWordModel.js'
+
+
+}
