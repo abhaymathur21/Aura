@@ -46,8 +46,8 @@ def chat():
           
           if the user asks to send an email:
             identify task_type: 'send', 'delete', 'check_inbox'
-            in case of task_type 'send', identify the message
-          answer format:'email', task_type, message (if any)
+            in case of task_type 'send', identify the message and receiver
+          answer format:'email', task_type, message (if any), receiver (if any)
           
           if the user asks to send a text message:
             identify the message and the receiver
@@ -66,36 +66,36 @@ def chat():
           answer format: 'web', prompt
           
           if none of the above tasks apply:
-          answer format: 'chat', user input
+          answer format: 'chat', input_string
           
           given user input: {input_string}
           """
     ]
 
     response = model.generate_content(classification_prompt)
-
-    if "calculator" in response.text:
+    task = response.text.split(",")[0].strip()
+    if "calculator" in task:
         print(response.text)
 
-    elif "command" in response.text:
+    elif "command" in task:
         print(response.text)
         
-    elif "email" in response.text:
+    elif "email" in task:
         print(response.text)
         
-    elif "text" in response.text:
+    elif "text" in task:
         print(response.text)
         
-    elif "api" in response.text:
+    elif "api" in task:
         print(response.text)
         
-    elif "calendar" in response.text:
+    elif "calendar" in task:
         print(response.text)
     
-    elif "web" in response.text:
+    elif "web" in task:
         print(response.text)
         
-    elif "chat" in response.text:
+    elif "chat" in task:
         print(response.text)
 
     else:
