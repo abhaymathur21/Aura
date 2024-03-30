@@ -8,14 +8,21 @@ import { NavbarToggle } from 'flowbite-react/lib/esm/components/Navbar/NavbarTog
 
 // import '../styles/Home.css'
 // import x from '../Images/icon.png'
-// import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import './Nav.css'
 
 import SettingsIcon from '@mui/icons-material/Settings';
+import { Link } from 'react-router-dom'
 import React from 'react'
 
 const NavDash = () => {
+  // navigate = useNavigate()
+
+  // const handleSettingsClicks = () =>
+  // {
+  //   navigate('/settings')
+  // }
  
     return (
         <Navbar
@@ -41,7 +48,7 @@ const NavDash = () => {
           
           {/* <NavbarToggle /> */}
         </div>
-        <Button  className='dash-button'>
+        <Button  className='dash-button' as={Link} to='/settings'>
            <SettingsIcon color='white'/>
           </Button>
       </Navbar>

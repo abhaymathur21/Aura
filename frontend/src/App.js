@@ -11,6 +11,9 @@ import Login from './Pages/Login/Login';
 import Initial from './Pages/Initial/Initial';
 import WakeWordDetector from './Pages/Initial/Initial2';
 import Dashboard from './Pages/Dashboard/Dashboard.js';
+import Settings from './Pages/Settings/Settings.js';
+
+
 
 function App() {
   const handleWakeWord = () => 
@@ -27,6 +30,7 @@ function App() {
         <Route path='/login' element={<Login/>}/>
         <Route path='/initial' element={<Initial/>}/>
         <Route path='/dashboard' element={<Dashboard/>}/>
+        <Route path='/settings' element={<Settings/>}/>
 
 
         
