@@ -6,7 +6,7 @@ import asyncio
 async def autogen_command(command):
 
     config_list = config_list_from_json(
-        env_or_file="OAI_CONFIG_LIST",
+        env_or_file="backend/OAI_CONFIG_LIST",
     )
 
     llm_config = {"config_list": config_list}
@@ -33,6 +33,8 @@ async def autogen_command(command):
     prompt = f"""
     You are a command line command executor agent.
     Execute the command in the terminal and provide the output. 
+    
+    IF THE COMMAND IS RELATED TO GIT, MAKE SURE YOU ONLY EXECUTE THE ONE COMMAND NECESSARY, DO NOT GIT COMMIT OR GIT PUSH UNLESS ASKED TO EXPLICITLY BY THE USER
     
     Given command: {command}
     """
@@ -69,9 +71,9 @@ async def autogen_command(command):
     return autogen_output
 
 
-async def main():
-    input_command = input("Enter the command to be executed: ")
-    response = await autogen_command(input_command)
-    print(response)
+# async def main():
+#     input_command = input("Enter the command to be executed: ")
+#     response = await autogen_command(input_command)
+#     print(response)
 
-asyncio.run(main())
+# asyncio.run(main())
