@@ -1,7 +1,9 @@
-from autogen import AssistantAgent, UserProxyAgent, config_list_from_json
+from autogen import config_list_from_json, AssistantAgent, UserProxyAgent
+import re
+import asyncio
 
 
-async def autogen(generated_code):
+async def autogen_command(command):
 
     config_list = config_list_from_json(
         env_or_file="OAI_CONFIG_LIST",
@@ -29,19 +31,16 @@ async def autogen(generated_code):
     # is_termination_msg=lambda msg: "SUCCESS" in msg.get("content", ""),
 
     prompt = f"""
-    You are a debugger agent.
-    Generate sample data appropriate to the code and then run, test and debug the given code. 
+    You are a command line command executor agent.
+    Execute the command in the terminal and provide the output. 
     
-    Given code: {generated_code}
+    Given command: {command}
     """
 
     user_proxy_agent.initiate_chat(assistant_agent, message=prompt)
     await user_proxy_agent.a_send(
-        f"""Based on the results in above conversation, please provide the final corrected code between ``` and ```.
-        Only give the code and not any sample data or any other information.
-        The code should be in the same language as the original code.
-        The function should be safe and secure to use.
-        The function should be the only output.
+        f"""Based on the results in above conversation, please provide the output generateed by the command execution between ``` and ```.
+        Only give the output verbatim as it is and not any sample data or any other information.
 
         There is no need to use the word TERMINATE in this response.
 
@@ -58,13 +57,21 @@ async def autogen(generated_code):
     )
 
     last_message = assistant_agent.chat_messages[user_proxy_agent][-1]["content"]
-    print("last_Message: ", last_message)
+    # print("last_Message: ", last_message)
 
-    autogen_code = re.search(
+    autogen_output = re.search(
         r"('''|```)?(.*?)('''|```)", last_message, re.DOTALL
     ).group(2)
     # start_index = last_message.find("```") + 3 # Adding 3 to exclude the triple quotes themselves
     # end_index = last_message.rfind("```")
     # autogen_code = last_message[start_index:end_index]
-    print("autogen_code: ", autogen_code)
-    return autogen_code
+    # print("final autogen_output: ", autogen_output)
+    return autogen_output
+
+
+async def main():
+    input_command = input("Enter the command to be executed: ")
+    response = await autogen_command(input_command)
+    print(response)
+
+asyncio.run(main())
