@@ -239,7 +239,7 @@ const Dashboard = () => {
   return (
     <>
     <Box sx={{backgroundColor:'black', minHeight: '100vh', display: 'flex', flexDirection: 'column'}}>
-    {!voiceOn && ( // Conditionally render the <ReactMic> component if voiceOn is true
+     {/* // Conditionally render the <ReactMic> component if voiceOn is true */}
         <ReactMic 
           record={isRecording}
           className="sound-wave"
@@ -247,7 +247,7 @@ const Dashboard = () => {
           // onData={onData}
           strokeColor="#000000"
         />
-      )} 
+      
     <NavDash/>
     {/* <p style={{color:'white'}}>{transcript}</p> */}
 
