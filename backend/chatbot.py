@@ -1,8 +1,10 @@
+from functionalities.autogen_code import autogen_command
+from functionalities.math_autogen import autogen_math
+from functionalities.web_search import scrape_google_search
+
 import google.generativeai as genai
 import os
 from dotenv import load_dotenv
-
-from functionalities.autogen_code import autogen_command
 import asyncio
 
 load_dotenv()
@@ -49,7 +51,7 @@ def llm_model(input_string):
 
         Given the raw text input above, select the task best suited for the input, depending on what the user seems to need: 
         
-        if the user asks for any mathematical calculations that require a calculator (example: addition, subtraction, multiplication, division, sin, cosine, standard deviation, etc), identify operators and operation output format: 'calculator', operators, operation
+        if the user asks for any mathematical calculations or puts forth any mathemtical problem, output in strictly this format: 'calculator'
           
         if the user asks to execute a command prompt or a code:
         output format: 'command', input_string
@@ -88,18 +90,25 @@ def llm_model(input_string):
     print(task)
     if task == "calculator":
         print(response.text)
-        return response.text
+        
+        async def math():
+            global output 
+            output = await autogen_math(input_string)
+        
+        asyncio.run(math())
+        
+        return output
 
     elif task == "command":
         print(response.text)
         
         input_string = response.text.split(",")[1].strip()
                 
-        async def main():
+        async def command():
             global output 
             output = await autogen_command(input_string)
         
-        asyncio.run(main())
+        asyncio.run(command())
         
         return output
         
@@ -121,7 +130,23 @@ def llm_model(input_string):
     
     elif task == "web":
         print(response.text)
-        return response.text
+        
+        links = scrape_google_search(input_string, 5) # 5 is the number of search results to return (i.e. top 5 results)
+        
+        prompt = [
+            f"""
+            Given input string: {input_string}
+            
+        
+            Output whatever you know about the above mentioned input string in one short paragraph and if you don't have any knowledge about it, output 'I don't know anything about this topic but I can search the web for you'
+            """
+        ]
+        
+        llm_response = model.generate_content(prompt)
+        
+        final_response = llm_response.text + "\n\n" + "Here are the top 5 results from the web:\n-" + "\n- ".join(links)
+                
+        return final_response
         
     elif task == "chat":
         print(response.text)

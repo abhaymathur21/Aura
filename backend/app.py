@@ -114,6 +114,16 @@ def delete_person():
     return message
     
 
+@app.route("/upload_pdf", methods=['POST'])
+def upload_pdf():
+    pass
+
+
+@app.route("/upload_image", methods=['POST'])
+def upload_image():
+    pass
+
+
 @app.route("/llm_chatbot", methods=['POST'])
 def llm_chatbot():
     
