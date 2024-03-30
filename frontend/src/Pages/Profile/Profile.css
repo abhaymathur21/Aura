@@ -1,0 +1,11 @@
+.Card
+{
+    background-color: black !important;
+    opacity: 0.75 !important;
+    border: none !important;
+}
+
+.Card:hover
+{
+    border: 1px solid white !important
+}
