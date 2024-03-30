@@ -114,20 +114,18 @@ def delete_person():
     return message
     
 
-@app.route("/llm_chatbot", methods=['GET', 'POST'])
+@app.route("/llm_chatbot", methods=['POST'])
 def llm_chatbot():
     
-    if request.method == "POST":
-        data = request.get_json()
-        input_string = data.get('message')
-        
-        print('Received string:', input_string)
-        
-        response = llm_model(input_string)
-        # print(response)
-        return response
-
-
+    data = request.get_json()
+    input_string = data.get('message')
+    
+    print('Received string:', input_string)
+    
+    response = llm_model(input_string)
+    # print(response)
+    return response
+    
 
 if __name__ == '__main__':
     app.run(debug=True)

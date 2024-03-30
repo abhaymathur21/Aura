@@ -6,7 +6,7 @@ import asyncio
 async def autogen_command(command):
 
     config_list = config_list_from_json(
-        env_or_file="OAI_CONFIG_LIST",
+        env_or_file="backend/OAI_CONFIG_LIST",
     )
 
     llm_config = {"config_list": config_list}
@@ -69,9 +69,9 @@ async def autogen_command(command):
     return autogen_output
 
 
-async def main():
-    input_command = input("Enter the command to be executed: ")
-    response = await autogen_command(input_command)
-    print(response)
+# async def main():
+#     input_command = input("Enter the command to be executed: ")
+#     response = await autogen_command(input_command)
+#     print(response)
 
-asyncio.run(main())
+# asyncio.run(main())
