@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 
 from functionalities.autogen_code import autogen_command
+from functionalities.math_autogen import autogen_math
 import asyncio
 
 load_dotenv()
@@ -49,7 +50,7 @@ def llm_model(input_string):
 
         Given the raw text input above, select the task best suited for the input, depending on what the user seems to need: 
         
-        if the user asks for any mathematical calculations that require a calculator (example: addition, subtraction, multiplication, division, sin, cosine, standard deviation, etc), identify operators and operation output format: 'calculator', operators, operation
+        if the user asks for any mathematical calculations or puts forth any mathemtical problem, output in strictly this format: 'calculator'
           
         if the user asks to execute a command prompt or a code:
         output format: 'command', input_string
@@ -88,18 +89,25 @@ def llm_model(input_string):
     print(task)
     if task == "calculator":
         print(response.text)
-        return response.text
+        
+        async def math():
+            global output 
+            output = await autogen_math(input_string)
+        
+        asyncio.run(math())
+        
+        return output
 
     elif task == "command":
         print(response.text)
         
         input_string = response.text.split(",")[1].strip()
                 
-        async def main():
+        async def command():
             global output 
             output = await autogen_command(input_string)
         
-        asyncio.run(main())
+        asyncio.run(command())
         
         return output
         
