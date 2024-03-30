@@ -1,0 +1,88 @@
+.scrollable-div {
+    background-color: #000000;
+    flex: 1; /* Grow to fill available space */
+    overflow-y: auto; /* Enable vertical scrolling if needed */
+    text-align: justify;
+    padding: 2em;
+}
+
+.footer {
+    background-color: #000000;
+    color: #ffffff;
+    text-align: center;
+    padding: 2px;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height:8vh;
+    padding-bottom: 1em !important;
+    display: flex;
+    flex-direction: row;
+
+}
+
+.search
+{
+    color: rgb(84, 82, 82) !important;
+    border: 2px solid rgb(84, 82, 82) !important;
+    border-color: rgb(84, 82, 82) !important;
+    border-radius: 10px !important;
+    width: 30vw;
+
+   
+}
+
+.dash-button
+{
+    background-color: black !important;
+    color: white !important;
+    
+}
+.dash-button:active
+{
+    border: none !important;
+}
+
+.inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.inputfile + label {
+    font-size: 1.25em;
+    font-weight: 700;
+    color: white;
+    background-color: black;
+    display: inline-block;
+}
+
+.inputfile:focus + label,
+.inputfile + label:hover {
+    background-color: red;
+}
+
+.inputfile + label {
+	cursor: pointer; /* "hand" cursor */
+}
+
+.inputfile:focus + label {
+	outline: 1px dotted #000;
+	outline: -webkit-focus-ring-color auto 5px;
+}
+
+.file-input
+{
+    background-color: #ffffff !important;
+    color:#000 !important;
+    border-radius: 10px !important;
+}
+/* 
+.user
+{
+    background-color:'pink' !important
+} */

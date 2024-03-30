@@ -10,6 +10,11 @@ import { Route,Routes, BrowserRouter } from 'react-router-dom';
 import Login from './Pages/Login/Login';
 import Initial from './Pages/Initial/Initial';
 import WakeWordDetector from './Pages/Initial/Initial2';
+import Dashboard from './Pages/Dashboard/Dashboard.js';
+import Profile from './Pages/Profile/Profile.js';
+
+
+
 
 function App() {
   const handleWakeWord = () => 
@@ -25,6 +30,9 @@ function App() {
         <Route path='/signup' element={<Sign/>}></Route>
         <Route path='/login' element={<Login/>}/>
         <Route path='/initial' element={<Initial/>}/>
+        <Route path='/dashboard' element={<Dashboard/>}/>
+        <Route path='/profile' element={<Profile/>}/>
+        
 
 
         

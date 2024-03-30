@@ -70,15 +70,15 @@ def read_text_from_image(file):
     return response.text
 
 # Example usage
-pdf_path = "example.pdf"  # Path to your PDF file
-image_path = "example.png"  # Path to your image file
+# pdf_path = "example.pdf"  # Path to your PDF file
+# image_path = "example.png"  # Path to your image file
 
 # Reading text from PDF
-pdf_text = read_text_from_pdf(pdf_path)
-print("Text from PDF:")
-print(pdf_text)
+# pdf_text = read_text_from_pdf(pdf_path)
+# print("Text from PDF:")
+# print(pdf_text)
 
-# Reading text from image
-image_text = read_text_from_image(image_path)
-print("\nText from image:")
-print(image_text)
+# # Reading text from image
+# image_text = read_text_from_image(image_path)
+# print("\nText from image:")
+# print(image_text)

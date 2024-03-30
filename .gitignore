@@ -2,3 +2,7 @@ venv
 OAI_CONFIG_LIST
 __pycache__
 .cache
+token.json
+credentials.json
+.env
+audio_classification_model.h5
