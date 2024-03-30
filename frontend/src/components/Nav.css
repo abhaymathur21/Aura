@@ -1,0 +1,11 @@
+.dash-button
+{
+    background-color: black !important;
+    
+}
+.dash-button:active
+{
+    border: none !important;
+    margin-left: auto;
+}
+
