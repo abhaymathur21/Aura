@@ -135,13 +135,21 @@ const Dashboard = () => {
         {
             console.log(domainFileRef?.current?.files?.[0]);
 
+            var formData = new FormData();
+            formData.append('file', domainFileRef?.current?.files?.[0]);
+            formData.append('message', input);
+      // console.log(formData)
+      formData.forEach((value, key) => {
+        console.log("Hi")
+        console.log(key + ":" + value);
+      });
+
+      setInput("")
+
       axios
         .post(
           "http://127.0.0.1:5000/upload_file",
-          {
-            file: domainFileRef?.current?.files?.[0],
-            message: input,
-          },
+          formData,
           {
             headers: {
               "Content-Type": "multipart/form-data",
@@ -149,10 +157,11 @@ const Dashboard = () => {
           }
         )
         .then((res) => {
-          console.log("response File", res.data);
+          console.log("response File", res.data.data);
+          setInput("")
           setMessages((prevMessages) => [
             ...prevMessages,
-            { user: "agent", message: res.data },
+            { user: "agent", message: res.data.data},
           ]);
         })
         .catch((err) => {
@@ -341,7 +350,7 @@ const Dashboard = () => {
             ))}
           </Box>
         </Box>
-        <Box className="footer" sx={{ flexShrink: 0 , marginBottom:'2em'}}>
+        <Box className="footer" sx={{ flexShrink: 0 }}>
           <Grid container>
             <Grid item xs={1} />
             <Grid item xs={3}>

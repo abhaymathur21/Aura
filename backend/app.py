@@ -10,11 +10,11 @@ from pydub import AudioSegment
 from keras.models import load_model
 from voice_recognition import classify_audio
 from functionalities.text_conversion import read_text_from_pdf, read_text_from_image
-from flask_cors import CORS
+from flask_cors import CORS,cross_origin
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
-
+CORS(app, resources={r"/*": {"origins": "*"}})
+app.config['CORS_HEADERS'] = 'Content-Type' 
 uri = "mongodb+srv://abhaymathur21:itsmeright@codeshastra.lxorakw.mongodb.net/?retryWrites=true&w=majority&appName=Codeshastra"
 
 # Create a new client and connect to the server
@@ -73,8 +73,8 @@ def update_person(userID):
     print(document)
     if document:
         # Update the fields of the document
-        document["personName"] = data["personName"] if data["personName"] else document["personName"]
-        document["chatHistory"] = data["chatHistory"] if chat_history else document["chatHistory"]
+        # document["personName"] = data["personName"] if data["personName"] else document["personName"]
+        document["chatHistory"] = chat_history if chat_history else document["chatHistory"]
 
         document = {
             "$set": document
@@ -131,12 +131,13 @@ def delete_person():
     
 
 @app.route("/upload_file", methods=['POST'])
+@cross_origin()
 def upload_file():
     if 'file' not in request.files:
         return jsonify({"error": "No file uploaded"}), 400
     
-    file = request.files['file']
-    user_input = request.files['message']
+    file = request.files.get('file')
+    user_input = request.files.get('message')
     
     # Validate file
     if file.filename == "":
@@ -151,7 +152,7 @@ def upload_file():
         
         # filename = os.path.join(source_folder, r"Codeshastra X\backend\uploaded_pdfs", file.filename)
         # filename = f"{source_folder}/Codeshastra X/backend/uploaded_pdfs/{file.filename}"
-        filename = "uploaded_audios/" + file.filename
+        filename = "backend/uploaded_pdfs/" + file.filename
 
         file.save(filename)
         file_text = read_text_from_pdf(filename)
@@ -163,6 +164,8 @@ def upload_file():
         
         
     rag_response = rag_llm(user_input, file_text)
+    
+    return jsonify({"data": rag_response}), 200
         
         
 @app.route("/audio", methods=['POST'])

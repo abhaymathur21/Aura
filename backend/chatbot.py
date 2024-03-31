@@ -181,7 +181,7 @@ def llm_model(input_string, chat_history):
             
             print(tasks)
             
-            output = "Sorry, I cannot perform that task. But here are the 3 most relevant tasks I can perform based on your input: \n\n1. "+task[0]+"\n2. "+task[1]+"\n3. "+task[2]
+            output = "Sorry, I cannot perform that task. But here are the 3 most relevant tasks I can perform based on your input: \n\n1. "+tasks[0]+"\n2. "+tasks[1]+"\n3. "+tasks[2]
             
             # tasks_json = json.loads("{"+"task1:"+tasks[0]+", task2:"+tasks[1]+", task3:"+tasks[2]+"}")
             
