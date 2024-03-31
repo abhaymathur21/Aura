@@ -59,7 +59,7 @@ const Sign = () => {
                     })
                     .then((res) => {
                         setProfile(res.data);
-                        navigate('/')
+                        navigate('/recorder')
                     })
                     .catch((err) => console.log(err));
             }

@@ -111,7 +111,7 @@ const Dashboard = () => {
     const handleSubmit = () =>
     {
         console.log('started submitting')
-        if(domainFileRef !== null)
+        if(domainFileRef !== null && domainFileRef.current.files.length > 0)
         {
             console.log(domainFileRef?.current?.files?.[0]);
 
