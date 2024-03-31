@@ -66,6 +66,28 @@ const Dashboard = () => {
       const [inputValue, setInputValue] = useState('');
       const [options, setOptions] = useState([]);
 
+
+      useEffect(() => {
+        // Function to play speech for the last message
+        const playSpeechForLastMessage = () => {
+          
+          const lastMessage = messages[messages.length - 1];
+          if (lastMessage && lastMessage.user == 'agent') {
+            // Use speech synthesis API to speak the last message
+            const speechSynthesisUtterance = new SpeechSynthesisUtterance(lastMessage.message);
+            window.speechSynthesis.speak(speechSynthesisUtterance);
+          }
+        };
+
+        playSpeechForLastMessage();
+
+        // Clean-up function
+        return () => {
+          // Stop speech synthesis when component unmounts
+          window.speechSynthesis.cancel();
+        };
+      }, [messages]);
+      
       useEffect(() => {
         const fetchAutocompleteOptions = async () => {
           try {
@@ -113,13 +135,21 @@ const Dashboard = () => {
         {
             console.log(domainFileRef?.current?.files?.[0]);
 
+            var formData = new FormData();
+            formData.append('file', domainFileRef?.current?.files?.[0]);
+            formData.append('message', input);
+      // console.log(formData)
+      formData.forEach((value, key) => {
+        console.log("Hi")
+        console.log(key + ":" + value);
+      });
+
+      setInput("")
+
       axios
         .post(
           "http://127.0.0.1:5000/upload_file",
-          {
-            file: domainFileRef?.current?.files?.[0],
-            message: input,
-          },
+          formData,
           {
             headers: {
               "Content-Type": "multipart/form-data",
@@ -127,10 +157,11 @@ const Dashboard = () => {
           }
         )
         .then((res) => {
-          console.log("response File", res.data);
+          console.log("response File", res.data.data);
+          setInput("")
           setMessages((prevMessages) => [
             ...prevMessages,
-            { user: "agent", message: res.data },
+            { user: "agent", message: res.data.data},
           ]);
         })
         .catch((err) => {
@@ -149,7 +180,7 @@ const Dashboard = () => {
       ]);
       axios
         .post(
-          "http://127.0.0.1:5000/llm_chatbot",
+          "http://127.0.0.1:5000/llm_chatbot/1",
           {
             message: input,
           },
@@ -164,7 +195,7 @@ const Dashboard = () => {
 
           setMessages((prevMessages) => [
             ...prevMessages,
-            { user: "agent", message: res.data },
+            { user: "agent", message: res.data.data },
           ]);
         })
         .catch((err) => {
@@ -182,7 +213,7 @@ const Dashboard = () => {
   useEffect(() => {
     axios
       .post(
-        "http://127.0.0.1:5000/update_person",
+        "http://127.0.0.1:5000/update_person/1",
         {
           messages: messages,
         },
@@ -302,7 +333,7 @@ const Dashboard = () => {
         <Box sx={{ flex: "1 0 auto", overflowY: "auto" }}>
           <Box className="scrollable-div">
             {messages.map((message, index) => (
-              <>
+              
                 <Typography
                   key={index}
                   sx={{
@@ -313,9 +344,9 @@ const Dashboard = () => {
                   }}
                   className={chatVariant({ variant: message.user })}
                 >
-                  {message.message}
+                  {typeof message.message === 'object' ? JSON.stringify(message.message) : message.message}
                 </Typography>
-              </>
+              
             ))}
           </Box>
         </Box>
@@ -327,7 +358,7 @@ const Dashboard = () => {
             </Grid>
             <Grid item xs={4}>
             <ThemeProvider theme={theme}>
-            {/* <TextField
+            <TextField
             id="chat"
             placeholder='Ask a Question ...'
             name='chat'
@@ -337,9 +368,9 @@ const Dashboard = () => {
             fullWidth
             InputProps={{ style: { color: 'white' } }}
             
-            /> */}
+            />
 
-<Autocomplete
+{/* <Autocomplete
   disablePortal
   id="combo-box-demo"
   options={options}
@@ -357,7 +388,7 @@ const Dashboard = () => {
       InputProps={{ style: { color: 'white' } }}
     />
   )}
-/>
+/> */}
 
 
             </ThemeProvider>

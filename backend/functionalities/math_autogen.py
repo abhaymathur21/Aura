@@ -48,7 +48,7 @@ async def autogen_math(problem):
     math_proxy_agent.initiate_chat(assistant_agent, message=math_proxy_agent.message_generator, problem=problem)
     
     await math_proxy_agent.a_send(
-        f"""Based on the results in above conversation, please provide the final answer to the math problem between ``` and ```.
+        f"""Based on the results in above conversation, please provide the final answer to the math problem between ``` and ```. Example: ```x = 3```.
         Only give the output verbatim as it is and not any sample data or any other information.
 
         There is no need to use the word TERMINATE in this response.
@@ -66,7 +66,7 @@ async def autogen_math(problem):
     )
 
     last_message = assistant_agent.chat_messages[math_proxy_agent][-1]["content"]
-    # print("last_Message: ", last_message)
+    print("last_Message: ", last_message)
 
     autogen_output = re.search(
         r"('''|```)?(.*?)('''|```)", last_message, re.DOTALL
