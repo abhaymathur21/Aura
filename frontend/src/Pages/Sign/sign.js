@@ -14,12 +14,26 @@ import { GoogleLogin } from '@react-oauth/google';
 // import GoogleLogin from 'react-google-login';
 // import { useNavigate } from 'react-router-dom';
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-
-
+const theme = createTheme({
+    components: {
+      MuiInputBase: {
+        styleOverrides: {
+          input: {
+            '&::placeholder': {
+              color: 'white', // Change the color here
+            },
+          },
+        },
+      },
+    },
+  });
 
 const Sign = () => {
     // const navigate= useNavigate();
+    const [name , setName] = useState('');
+    const [location , setLocation] = useState('');
     const [email , setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -64,6 +78,8 @@ const Sign = () => {
                 })
             }else{
                 const response = await axios.post("http://localhost:8000/user/register",{
+                    name,
+                    location,
                     email,
                     password
                 });
@@ -120,7 +136,7 @@ const Sign = () => {
         <Paper elevation={3} className='paper-sign' style={{ zIndex: 1, position: 'relative' }}>
             <Box style={{ zIndex: 1, position: 'relative' }}>
                 <Box display="flex" flexDirection="column" alignItems="center" >
-                    <Typography variant='h3' style={{
+                    <Typography variant='h3'  style={{
                         alignSelf: 'center',
                         fontWeight: 'bolder',
                         color: 'white',
@@ -134,9 +150,25 @@ const Sign = () => {
                     fontWeight: '600',
                     color:'white'
                 }}>
+                Name:
+                </Typography>
+                <TextField fullWidth className='text-field' InputProps={{ style: { color: 'white' } }}  onChange={e => setName(e.target.value)} />
+                <Typography variant='h6' sx={{
+                    marginTop: '1em',
+                    fontWeight: '600',
+                    color:'white'
+                }}>
+                    Location:
+                </Typography>
+                <TextField fullWidth className='text-field'InputProps={{ style: { color: 'white' } }}  onChange={e => setLocation(e.target.value)} />
+                <Typography variant='h6' sx={{
+                    marginTop: '1em',
+                    fontWeight: '600',
+                    color:'white'
+                }}>
                     Email:
                 </Typography>
-                <TextField fullWidth className='text-field' onChange={e => setEmail(e.target.value)} />
+                <TextField fullWidth className='text-field' InputProps={{ style: { color: 'white' } }}  onChange={e => setEmail(e.target.value)} />
                 <Typography variant='h6' sx={{
                     marginTop: '1em',
                     fontWeight: '600',
@@ -144,7 +176,7 @@ const Sign = () => {
                 }}>
                     Password:
                 </Typography>
-                <TextField fullWidth className='text-field' onChange={e => setPassword(e.target.value)} />
+                <TextField fullWidth className='text-field' InputProps={{ style: { color: 'white' } }}  onChange={e => setPassword(e.target.value)} />
 
                 <Typography variant='h6' sx={{
                     marginTop: '1em',
@@ -156,7 +188,13 @@ const Sign = () => {
                 }}>
                     OR
                 </Typography>
-                <Button onClick={login} className='google'>Sign Up with Google</Button>
+                <Box display='flex' flexDirection='column' alignItems='center'>
+    <Button className='google' fullWidth onClick={login} style={{ display: 'flex', alignItems: 'center' }}>
+        <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo" style={{ width: '30px', height: '30px', marginRight:'18%', marginLeft: '20px' }} />
+        <span >Sign Up with Google</span>
+    </Button>
+</Box>
+
                 <Box display='flex' flexDirection='column' alignItems='center'>
                     <Button className='button-sign-up' fullWidth onClick={handleRegister}>
                         Sign Up
