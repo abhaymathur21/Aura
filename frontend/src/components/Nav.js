@@ -5,6 +5,7 @@ import { NavbarLink } from 'flowbite-react/lib/esm/components/Navbar/NavbarLink'
 import { Button } from 'flowbite-react'
 import { NavbarCollapse } from 'flowbite-react/lib/esm/components/Navbar/NavbarCollapse'
 import { NavbarToggle } from 'flowbite-react/lib/esm/components/Navbar/NavbarToggle'
+import auraLogo from './aura.png';
 
 // import '../styles/Home.css'
 // import x from '../Images/icon.png'
@@ -36,9 +37,9 @@ const handlebutton = ()=>
       {/* <NavbarIcon> */}
      
    
-      
-      <span className="self-center whitespace-nowrap text-xl text-white font-semibold dark:text-white color-[white]">
-        Aura      </span>
+      <img src={auraLogo} alt="Aura Logo" className="navbar-logo" style={{ width: '100px', height: 'auto', marginRight: '2em', marginLeft:'1em'}}/>
+      {/* <span className="self-center whitespace-nowrap text-xl text-white font-semibold dark:text-white color-[white]">
+        Aura      </span> */}
     </NavbarBrand>
     <div className="flex md:order-2">
       
