@@ -6,6 +6,7 @@ from chatbot import llm_model, rag_llm
 import base64
 import io
 import os
+import bcrypt
 from pydub import AudioSegment
 from keras.models import load_model
 from voice_recognition import classify_audio
@@ -36,7 +37,8 @@ def add_person():
     # documents = collection.find({})
     # result = [json.loads(json_util.dumps(doc)) for doc in documents]  # Convert ObjectId to string
     # print(result)
-    
+    document["password"] = bcrypt.hashpw(document["password"].encode("utf-8"), bcrypt.gensalt())
+
     # Insert the document into the collection
     collection.insert_one(document)
     
@@ -168,8 +170,8 @@ def upload_file():
     return jsonify({"data": rag_response}), 200
         
         
-@app.route("/audio", methods=['POST'])
-def audio():
+@app.route("/audio/<int:userID>", methods=['POST'])
+def audio(userID):
     
     if 'audio' not in request.files:
         return jsonify({"error": "No audio uploaded"}), 400
@@ -183,17 +185,24 @@ def audio():
     print(file_path)
     # audio_seg = AudioSegment.from_file(file_path, format="wav")
     
-    
-    
     model_path = r"backend\audio_classification_model.h5"
     model = load_model(model_path)
     
     full_file_path = "backend\\uploaded_audios\\" + blob_data.filename
     
-    prediction = classify_audio(full_file_path, model)
-    print(prediction)
+    prediction_name = classify_audio(full_file_path, model)
+    print(prediction_name)
     
-    return jsonify({"classification": prediction}), 200
+    collection = db["User"+str(userID)]
+    # Query the collection for documents where the modelName matches prediction_name
+    matching_documents = collection.find({"personName": prediction_name})
+
+    # Iterate over the matching documents
+    for document in matching_documents:
+        # Access the chatHistory attribute from each document
+        chat_history = document.get("chatHistory")
+    
+    return jsonify({"classification": prediction_name}), 200
 
 
 @app.route("/llm_chatbot/<int:userID>", methods=['POST'])

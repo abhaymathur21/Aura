@@ -150,8 +150,15 @@ def llm_model(input_string, chat_history):
             print(task_type)
             if task_type == "news":
                 
+                # prompt = [
+                #     """
+                #     """
+                # ]
+                
+                country_code = "in"
+                
                 params = {
-                    "country": "in",
+                    "country": country_code,
                     "apiKey": os.environ["NEWS_API_KEY"],
                 }
 
@@ -175,6 +182,19 @@ def llm_model(input_string, chat_history):
                 print(article_string)
                 return article_string
             elif task_type == "weather":
+                
+                location =
+                url = f"http://api.openweathermap.org/data/2.5/weather?q={location}&appid={api_key}&units=metric"
+                response = requests.get(url)
+                if response.status_code == 200:
+                    data = response.json()
+                    temp = data["main"]
+                    print("Temperature: ",temp)
+                    temp = data["weather"]
+                    print("Weather: ",temp)
+                else:
+                    raise Exception(f"Failed to fetch temperature data: {response.text}")
+                
                 return "Here is the current weather forecast"
             
             return response.text

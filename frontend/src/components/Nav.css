@@ -13,7 +13,9 @@
 
 .button
 {
-    background-color: black !important;
+    background-color: rgb(255, 255, 255) !important;
+    
+    color:black !important;
     margin-left: auto;
     
 }
@@ -22,5 +24,4 @@
     border: none !important;
     margin-left: auto;
 }
-
 
