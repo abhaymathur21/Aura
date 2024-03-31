@@ -250,7 +250,7 @@ const Dashboard = () => {
 
     axios
       .post(
-        "http://127.0.0.1:5000/audio",
+        "http://127.0.0.1:5000/audio/1",
         formData,
         {
           headers: {
