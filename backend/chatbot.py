@@ -114,10 +114,10 @@ def llm_model(input_string, chat_history):
             print(response.text)
             
             async def math():
-                global output 
                 output = await autogen_math(input_string)
+                return output
             
-            asyncio.run(math())
+            output = asyncio.run(math())
             
             return output
 
@@ -127,10 +127,10 @@ def llm_model(input_string, chat_history):
             input_string = response.text.split(",")[1].strip()
                     
             async def command():
-                global output 
                 output = await autogen_command(input_string)
+                return output
             
-            asyncio.run(command())
+            output = asyncio.run(command())
             
             return output
             

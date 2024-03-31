@@ -66,6 +66,28 @@ const Dashboard = () => {
       const [inputValue, setInputValue] = useState('');
       const [options, setOptions] = useState([]);
 
+
+      useEffect(() => {
+        // Function to play speech for the last message
+        const playSpeechForLastMessage = () => {
+          
+          const lastMessage = messages[messages.length - 1];
+          if (lastMessage && lastMessage.user == 'agent') {
+            // Use speech synthesis API to speak the last message
+            const speechSynthesisUtterance = new SpeechSynthesisUtterance(lastMessage.message);
+            window.speechSynthesis.speak(speechSynthesisUtterance);
+          }
+        };
+
+        playSpeechForLastMessage();
+
+        // Clean-up function
+        return () => {
+          // Stop speech synthesis when component unmounts
+          window.speechSynthesis.cancel();
+        };
+      }, [messages]);
+      
       useEffect(() => {
         const fetchAutocompleteOptions = async () => {
           try {
@@ -149,7 +171,7 @@ const Dashboard = () => {
       ]);
       axios
         .post(
-          "http://127.0.0.1:5000/llm_chatbot",
+          "http://127.0.0.1:5000/llm_chatbot/1",
           {
             message: input,
           },
@@ -164,7 +186,7 @@ const Dashboard = () => {
 
           setMessages((prevMessages) => [
             ...prevMessages,
-            { user: "agent", message: res.data },
+            { user: "agent", message: res.data.data },
           ]);
         })
         .catch((err) => {
@@ -182,7 +204,7 @@ const Dashboard = () => {
   useEffect(() => {
     axios
       .post(
-        "http://127.0.0.1:5000/update_person",
+        "http://127.0.0.1:5000/update_person/1",
         {
           messages: messages,
         },
@@ -302,7 +324,7 @@ const Dashboard = () => {
         <Box sx={{ flex: "1 0 auto", overflowY: "auto" }}>
           <Box className="scrollable-div">
             {messages.map((message, index) => (
-              <>
+              
                 <Typography
                   key={index}
                   sx={{
@@ -313,13 +335,13 @@ const Dashboard = () => {
                   }}
                   className={chatVariant({ variant: message.user })}
                 >
-                  {message.message}
+                  {typeof message.message === 'object' ? JSON.stringify(message.message) : message.message}
                 </Typography>
-              </>
+              
             ))}
           </Box>
         </Box>
-        <Box className="footer" sx={{ flexShrink: 0 }}>
+        <Box className="footer" sx={{ flexShrink: 0 , marginBottom:'2em'}}>
           <Grid container>
             <Grid item xs={1} />
             <Grid item xs={3}>
@@ -327,7 +349,7 @@ const Dashboard = () => {
             </Grid>
             <Grid item xs={4}>
             <ThemeProvider theme={theme}>
-            {/* <TextField
+            <TextField
             id="chat"
             placeholder='Ask a Question ...'
             name='chat'
@@ -337,9 +359,9 @@ const Dashboard = () => {
             fullWidth
             InputProps={{ style: { color: 'white' } }}
             
-            /> */}
+            />
 
-<Autocomplete
+{/* <Autocomplete
   disablePortal
   id="combo-box-demo"
   options={options}
@@ -357,7 +379,7 @@ const Dashboard = () => {
       InputProps={{ style: { color: 'white' } }}
     />
   )}
-/>
+/> */}
 
 
             </ThemeProvider>
