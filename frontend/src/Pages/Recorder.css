@@ -1,0 +1,52 @@
+.recorder-text
+{
+    z-index: 1 !important;
+    height: 100vh;
+    margin: 10em 30em ;
+}
+
+.animation
+{
+    z-index: 0 !important;
+}
+
+.record
+{
+    color: aliceblue !important;
+    background-color: blueviolet !important;
+    width:20vw !important;
+    height: 5vh !important;
+    margin-left: 15px !important;
+    margin-right: auto !important;
+    margin-top: 10px !important;
+
+}
+
+.file
+{
+    color: white !important;
+}
+
+.submit
+{
+    color: aliceblue !important;
+    background-color: rgb(50, 23, 188) !important;
+    width:20vw !important;
+    height: 5vh !important;
+    margin-left: 15px !important;
+    margin-right: auto !important;
+    margin-top: 10px !important;
+
+}
+
+.record:hover
+{
+    color: aliceblue !important;
+    background-color: rgb(50, 23, 188) !important;
+}
+
+.submit:hover
+{
+    color: aliceblue !important;
+    background-color: blueviolet !important;
+}

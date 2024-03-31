@@ -9,9 +9,11 @@ import TextField from "@mui/material/TextField";
 import KeyboardVoiceIcon from "@mui/icons-material/KeyboardVoice";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 
-import Modal from "@mui/material/Modal";
-import { MuiFileInput } from "mui-file-input";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Modal from '@mui/material/Modal';
+import { MuiFileInput } from 'mui-file-input'
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+import Autocomplete from '@mui/material/Autocomplete'
 
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import axios from "axios";
@@ -58,24 +60,58 @@ const Dashboard = () => {
 
   const [input, setInput] = useState("");
 
-  const [voiceOn, setVoiceOn] = useState(true);
-  const [isRecording, setIsRecording] = useState(false);
+      const [voiceOn, setVoiceOn] = useState(true);
+      const [isRecording, setIsRecording] = useState(false);
 
-  const domainFileRef = useRef(null);
+      const [inputValue, setInputValue] = useState('');
+      const [options, setOptions] = useState([]);
 
-  const chatVariant = cva("p-2 text-pretty flex", {
-    variants: {
-      variant: {
-        user: "bg-white text-primary rounded-br-none ml-[100] ",
-        agent: "bg-purple-500 text-white rounded-bl-none mr-auto",
-      },
-    },
-  });
+      useEffect(() => {
+        const fetchAutocompleteOptions = async () => {
+          try {
+            console.log("yo")
+            const response = await axios.get('https://omrivolk-autocomplete-v1.p.rapidapi.com/complete', {
+              params: { s: input },
+              headers: {
+                'X-RapidAPI-Key': 'cc9c33e7d9mshf2ba8d9b84a6782p1b309ejsn389c10a0b6a1',
+                'X-RapidAPI-Host': 'omrivolk-autocomplete-v1.p.rapidapi.com'
+              }
+            });
+            setOptions(response.data);
+            console.log("Got the dataa")
+            console.log(response.data)
+          } catch (error) {
+            console.error(error);
+          }
+        };
+    
+        if (input.trim() !== '') {
+          fetchAutocompleteOptions();
+        } else {
+          setOptions([]);
+        }
+      }, [input]);
 
-  const handleSubmit = () => {
-    console.log("started submitting");
-    if (domainFileRef !== null) {
-      console.log(domainFileRef?.current?.files?.[0]);
+    
+    const domainFileRef = useRef(null);
+
+
+    const chatVariant = cva("p-2 text-pretty flex", {
+        variants: {
+            variant: {
+                user: "bg-white text-primary rounded-br-none ml-[100] ",
+                agent: "bg-purple-500 text-white rounded-bl-none mr-auto",
+            },
+        },
+    });
+  
+
+    const handleSubmit = () =>
+    {
+        console.log('started submitting')
+        if(domainFileRef !== null && domainFileRef.current.files.length > 0)
+        {
+            console.log(domainFileRef?.current?.files?.[0]);
 
       axios
         .post(
@@ -224,12 +260,19 @@ const Dashboard = () => {
   }
   let ResponseButtonData = [];
 
-  if (Object.keys(ResponseButton).length !== 0) {
-    ResponseButtonData = Object.keys(ResponseButton).map((key) => ({
-      label: ResponseButton[key],
-      taskId: key,
-    }));
-  }
+      if (Object.keys(ResponseButton).length !== 0) {
+          ResponseButtonData = Object.keys(ResponseButton).map((key) => ({
+              label: ResponseButton[key],
+              taskId: key,
+          }));
+      }
+
+
+
+
+  
+
+    
 
   return (
     <>
@@ -283,18 +326,42 @@ const Dashboard = () => {
               <input type="file" name="file" id="file" ref={domainFileRef} />
             </Grid>
             <Grid item xs={4}>
-              <ThemeProvider theme={theme}>
-                <TextField
-                  id="chat"
-                  placeholder="Ask a Question ..."
-                  name="chat"
-                  value={input || transcript}
-                  onChange={handleInput}
-                  className="search"
-                  fullWidth
-                  InputProps={{ style: { color: "white" } }}
-                />
-              </ThemeProvider>
+            <ThemeProvider theme={theme}>
+            {/* <TextField
+            id="chat"
+            placeholder='Ask a Question ...'
+            name='chat'
+            value={input||transcript}
+            onChange = {handleInput}
+            className='search'
+            fullWidth
+            InputProps={{ style: { color: 'white' } }}
+            
+            /> */}
+
+<Autocomplete
+  disablePortal
+  id="combo-box-demo"
+  options={options}
+  sx={{ width: 300 }}
+  renderInput={(params) => (
+    <TextField
+      {...params}
+      id="chat"
+      placeholder='Ask a Question ...'
+      name='chat'
+      value={input || transcript}
+      onChange={handleInput}
+      className='search'
+      fullWidth
+      InputProps={{ style: { color: 'white' } }}
+    />
+  )}
+/>
+
+
+            </ThemeProvider>
+            
             </Grid>
 
             <Grid item xs={1}>

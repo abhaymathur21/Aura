@@ -48,7 +48,7 @@ const NavDash = () => {
           
           {/* <NavbarToggle /> */}
         </div>
-        <Button  className='dash-button' as={Link} to='/settings'>
+        <Button  className='dash-button' as={Link} to='/profile'>
            <SettingsIcon color='white'/>
           </Button>
       </Navbar>

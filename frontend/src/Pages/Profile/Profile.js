@@ -8,6 +8,8 @@ import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Spline from '@splinetool/react-spline';
 import './Profile.css'
+import DeleteIcon from '@mui/icons-material/Delete';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
 
 const txtStyle = {
     //  fontFamily: 'Montserrat',
@@ -97,8 +99,9 @@ const Profile = () => {
                   
                 </CardContent>
                 <CardActions sx={{ float: "right" }}>
-                  <Button
+                <Button
                     size="40rem"
+                    sx={{color:'white'}}
                     // onClick={() => {
                     //   //   setSelectedNews(data);
                     //   setSelectedLecture(data);
@@ -111,11 +114,24 @@ const Profile = () => {
                     //   // console.log(data);
                     // }}
                   >
-                    <ArrowCircleRightIcon
-                      fontSize="large"
-                      color="white"
-                      variant="filled"
-                    />
+                    <ModeEditIcon color='white' fontSize='large'/>
+                  </Button>
+                  <Button
+                    size="40rem"
+                    sx={{color:'white'}}
+                    // onClick={() => {
+                    //   //   setSelectedNews(data);
+                    //   setSelectedLecture(data);
+                    //   localStorage.setItem(
+                    //     "LectureLocalStorage",
+                    //     JSON.stringify(data)
+                    //   );
+                    //   navigate(`/class/${data.id}`);
+                    //   // localStorage.setItem("classId", data.id);
+                    //   // console.log(data);
+                    // }}
+                  >
+                    <DeleteIcon color='white' fontSize='large'/>
                   </Button>
                 </CardActions>
               </Card>
@@ -195,8 +211,9 @@ const Profile = () => {
                   
                 </CardContent>
                 <CardActions sx={{ float: "right" }}>
-                  <Button
+                <Button
                     size="40rem"
+                    sx={{color:'white'}}
                     // onClick={() => {
                     //   //   setSelectedNews(data);
                     //   setSelectedLecture(data);
@@ -209,11 +226,24 @@ const Profile = () => {
                     //   // console.log(data);
                     // }}
                   >
-                    <ArrowCircleRightIcon
-                      fontSize="large"
-                      color="blue"
-                      variant="filled"
-                    />
+                    <ModeEditIcon color='white' fontSize='large'/>
+                  </Button>
+                <Button
+                    size="40rem"
+                    sx={{color:'white'}}
+                    // onClick={() => {
+                    //   //   setSelectedNews(data);
+                    //   setSelectedLecture(data);
+                    //   localStorage.setItem(
+                    //     "LectureLocalStorage",
+                    //     JSON.stringify(data)
+                    //   );
+                    //   navigate(`/class/${data.id}`);
+                    //   // localStorage.setItem("classId", data.id);
+                    //   // console.log(data);
+                    // }}
+                  >
+                    <DeleteIcon color='white' fontSize='large'/>
                   </Button>
                 </CardActions>
               </Card>
@@ -266,6 +296,7 @@ const Profile = () => {
                       {/* {data.subject.name} */}
                     </Typography>
                   </Box>
+                  
                   <Box
                     sx={{
                       display: "flex",
@@ -288,8 +319,16 @@ const Profile = () => {
                   
                 </CardContent>
                 <CardActions sx={{ float: "right" }}>
-                  <Button
+                <Button
                     size="40rem"
+                    sx={{color:'white'}}
+                    
+                  >
+                    <ModeEditIcon color='white' fontSize='large'/>
+                  </Button>
+                <Button
+                    size="40rem"
+                    sx={{color:'white'}}
                     // onClick={() => {
                     //   //   setSelectedNews(data);
                     //   setSelectedLecture(data);
@@ -302,11 +341,7 @@ const Profile = () => {
                     //   // console.log(data);
                     // }}
                   >
-                    <ArrowCircleRightIcon
-                      fontSize="large"
-                      color="blue"
-                      variant="filled"
-                    />
+                    <DeleteIcon color='white' fontSize='large'/>
                   </Button>
                 </CardActions>
               </Card>
