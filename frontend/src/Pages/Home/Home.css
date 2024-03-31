@@ -1,5 +1,5 @@
 .animation
-{
+{   margin-top: -5em;
     z-index: 0 !important;
 }
 
@@ -7,5 +7,12 @@
     z-index: 1;
     
     height: 100vh;
-    margin: 10em 30em ;
+    /* margin: 20em 10em ; */
+    margin-left: 10em;
+    margin-top: 20em;
+}
+
+.signup {
+    background-color: rgba(60, 59, 59, 0.51) !important;
+    padding: 1em 2em!important;
 }
