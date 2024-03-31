@@ -54,6 +54,12 @@ const style = {
 
 const Dashboard = () => {
   const [messages, setMessages] = useState([
+    { user: "agent", message: "Hi there! How can I help you today?Hi there! How can I help you today?Hi there! How can I help you today?Hi there! How can I help you today?Hi there! How can I help you today?Hi there! How can I help you today?Hi there! How can I help you today?Hi there! How can I help you today?"},
+    { user: "agent", message: "Hi there! How can I help you today?" },
+    { user: "agent", message: "Hi there! How can I help you today?" },
+    { user: "agent", message: "Hi there! How can I help you today?" },
+    { user: "agent", message: "Hi there! How can I help you today?" },
+    { user: "agent", message: "Hi there! How can I help you today?" },
     { user: "agent", message: "Hi there! How can I help you today?" },
   ]);
   const [ResponseButton, SetResponseButton] = useState([]);
@@ -304,6 +310,7 @@ const Dashboard = () => {
           minHeight: "100vh",
           display: "flex",
           flexDirection: "column",
+          
         }}
       >
         {/* // Conditionally render the <ReactMic> component if voiceOn is true */}
@@ -328,10 +335,12 @@ const Dashboard = () => {
                 <Typography
                   key={index}
                   sx={{
-                    width: "30vw",
+                    width: "30vw", // Minimum width of 30vw
+                    // maxWidth: "100%", // Maximum width based on content
                     marginLeft: message.user === "user" ? "auto" : "initial",
                     borderRadius: "10px",
-                    marginBottom: "10px",
+                    marginBottom: "20px",
+                    overflow: "auto"
                   }}
                   className={chatVariant({ variant: message.user })}
                 >
@@ -341,7 +350,8 @@ const Dashboard = () => {
             ))}
           </Box>
         </Box>
-        <Box className="footer" sx={{ flexShrink: 0 , marginBottom:'2em'}}>
+        <Box className="footer-container">
+        <Box className="footer" sx={{ flexShrink: 0 , marginBottom:'0'}}>
           <Grid container>
             <Grid item xs={1} />
             <Grid item xs={3}>
@@ -401,6 +411,7 @@ const Dashboard = () => {
               </Button>
             </Grid>
           </Grid>
+        </Box>
         </Box>
       </Box>
     </>

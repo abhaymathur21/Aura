@@ -26,8 +26,9 @@ const NavDash = () => {
  
     return (
         <Navbar
-        fluid
+        // fluid
         // rounded
+        fixed
         className='nav'
         
       >

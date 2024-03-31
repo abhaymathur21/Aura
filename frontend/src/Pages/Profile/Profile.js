@@ -36,7 +36,7 @@ const Profile = () => {
   }
   return (
     
-    <Box sx={{backgroundColor:'black', minHeight: '100vh'}}>
+    <Box sx={{backgroundColor:'black', minHeight: '100vh' , height:'auto'}}>
         <Box style={{ zIndex: 0, position: 'relative' }}>
         <Spline scene="https://prod.spline.design/abI9MJcWPEXkLkxT/scene.splinecode" className='animation' />
         </Box>
