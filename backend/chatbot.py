@@ -7,6 +7,7 @@ import os
 import json
 from dotenv import load_dotenv
 import asyncio
+import requests
 
 load_dotenv()
 
@@ -144,6 +145,38 @@ def llm_model(input_string, chat_history):
             
         elif task == "api call":
             print(response.text)
+            
+            task_type = response.text.split(",")[1].strip()
+            print(task_type)
+            if task_type == "news":
+                
+                params = {
+                    "country": "in",
+                    "apiKey": os.environ["NEWS_API_KEY"],
+                }
+
+                url = "https://newsapi.org/v2/top-headlines"
+
+                response = requests.get(url, params=params)
+
+                if response.status_code == 200:
+                    data = response.json()
+                    # Process the data as needed
+                    articles = data['articles']
+                    article_string = "Here are the top headlines:\n\n"
+                    for article in articles:
+                        try:
+                            print(article['title'])
+                            article_string+=article['title']+"\n"
+                        except:
+                            print("")
+                else:
+                    print("Failed to retrieve headlines:", response.status_code)
+                print(article_string)
+                return article_string
+            elif task_type == "weather":
+                return "Here is the current weather forecast"
+            
             return response.text
             
         elif task == "calendar function":
