@@ -54,13 +54,9 @@ const style = {
 
 const Dashboard = () => {
   const [messages, setMessages] = useState([
-    { user: "agent", message: "Hi there! How can I help you today?Hi there! How can I help you today?Hi there! How can I help you today?Hi there! How can I help you today?Hi there! How can I help you today?Hi there! How can I help you today?Hi there! How can I help you today?Hi there! How can I help you today?"},
+    
     { user: "agent", message: "Hi there! How can I help you today?" },
-    { user: "agent", message: "Hi there! How can I help you today?" },
-    { user: "agent", message: "Hi there! How can I help you today?" },
-    { user: "agent", message: "Hi there! How can I help you today?" },
-    { user: "agent", message: "Hi there! How can I help you today?" },
-    { user: "agent", message: "Hi there! How can I help you today?" },
+   
   ]);
   const [ResponseButton, SetResponseButton] = useState([]);
 
@@ -175,7 +171,7 @@ const Dashboard = () => {
         });
     }
     if (input == "" && transcript) {
-      input = transcript;
+      setInput(transcript)
     }
 
     if (input != "") {

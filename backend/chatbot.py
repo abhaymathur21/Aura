@@ -43,7 +43,7 @@ model = genai.GenerativeModel(
     safety_settings=safety_settings,
 )
 
-def llm_model(input_string, chat_history):
+def llm_model(input_string, chat_history, location):
     # input_string = input("Hello User!: ")
 
     classification_prompt = [
@@ -182,8 +182,8 @@ def llm_model(input_string, chat_history):
                 print(article_string)
                 return article_string
             elif task_type == "weather":
-                
-                location =
+                api_key = os.environ["WEATHER_API_KEY"]
+                location = location
                 url = f"http://api.openweathermap.org/data/2.5/weather?q={location}&appid={api_key}&units=metric"
                 response = requests.get(url)
                 if response.status_code == 200:

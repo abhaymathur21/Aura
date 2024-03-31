@@ -25,8 +25,8 @@ source_folder = r"C:\Users\a21ma\OneDrive\Desktop"
 # source_folder = "C:/Users/a21ma/OneDrive/Desktop"
 
 #define a global variable for personID every time voice is recognized
-personID = "1"
-    
+personName = "Abhay"    
+
 @app.route("/add_person", methods=['POST'])
 def add_person():
     
@@ -52,6 +52,7 @@ def add_person():
     #     "userName": "User1",
     #     "password": "password",
     #     "chatHistory": "chat_history",
+    #     "location": "location",
     #     "modelName": "model_name.h5"
     # }
     
@@ -69,7 +70,7 @@ def update_person(userID):
     collection = db["User"+str(userID)]
     # Find the document to update
     
-    query = {"personID": personID} #personID is a global variable that is set every time voice is recognized
+    query = {"personName": personName} #personID is a global variable that is set every time voice is recognized
     
     document = collection.find_one(query)
     print(document)
@@ -193,14 +194,17 @@ def audio(userID):
     prediction_name = classify_audio(full_file_path, model)
     print(prediction_name)
     
+    global personName
+    personName = prediction_name
+    
+    if personName == "None":
+        return jsonify({"data": "You are not authorized into the system"}), 400
+    
     collection = db["User"+str(userID)]
     # Query the collection for documents where the modelName matches prediction_name
-    matching_documents = collection.find({"personName": prediction_name})
+    matching_document = collection.find({"personName": personName})
 
-    # Iterate over the matching documents
-    for document in matching_documents:
-        # Access the chatHistory attribute from each document
-        chat_history = document.get("chatHistory")
+    # chat_history = matching_document["chatHistory"]
     
     return jsonify({"classification": prediction_name}), 200
 
@@ -213,17 +217,21 @@ def llm_chatbot(userID):
     
     print('Received string:', input_string)
     
+    if personName == "None":
+        return jsonify({"data": "You are not authorized into the system"}), 400
+    
     collection = db["User"+str(userID)]
     
-    query = {"personID": personID} #personID is a global variable that is set every time voice is recognized
+    query = {"personName": personName} #personName is a global variable that is set every time voice is recognized
     
     document = collection.find_one(query)
     
     chat_history = document["chatHistory"]
+    location = document["location"]
     print(chat_history)
 
     
-    response = llm_model(input_string, chat_history)
+    response = llm_model(input_string, chat_history, location)
     # print(response)
     return jsonify({"data":response})
     

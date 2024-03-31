@@ -45,8 +45,8 @@ def classify_audio(audio_file, model):
     processed_data = process_audio(audio_file)
     # print(processed_data.shape)
     prediction = model.predict(processed_data)
-    if np.max(prediction)<0.75:
-        return 'none'
+    if np.max(prediction)<0.5:
+        return 'None'
     else:
         return classes[np.argmax(prediction)]
 
