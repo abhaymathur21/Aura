@@ -10,16 +10,18 @@ from pydub import AudioSegment
 from keras.models import load_model
 from voice_recognition import classify_audio
 from functionalities.text_conversion import read_text_from_pdf, read_text_from_image
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 uri = "mongodb+srv://abhaymathur21:itsmeright@codeshastra.lxorakw.mongodb.net/?retryWrites=true&w=majority&appName=Codeshastra"
 
 # Create a new client and connect to the server
 client = MongoClient(uri)
 db = client["Accounts"]
-
-source_folder = "C:/Users/Abhay Mathur/Desktop"
+source_folder = r"C:\Users\a21ma\OneDrive\Desktop"
+# source_folder = "C:/Users/a21ma/OneDrive/Desktop"
 
 #define a global variable for personID every time voice is recognized
 personID = "1"
@@ -147,7 +149,10 @@ def upload_file():
     
     if file.filename.lower().endswith(".pdf"):
         
-        filename = os.path.join(source_folder, "Codeshastra X/backend/uploaded_pdfs", file.filename)
+        # filename = os.path.join(source_folder, r"Codeshastra X\backend\uploaded_pdfs", file.filename)
+        # filename = f"{source_folder}/Codeshastra X/backend/uploaded_pdfs/{file.filename}"
+        filename = "uploaded_audios/" + file.filename
+
         file.save(filename)
         file_text = read_text_from_pdf(filename)
         
@@ -168,17 +173,21 @@ def audio():
     
     blob_data= request.files['audio']
     
-
-    # Decode base64 blob data if needed
-    audio_data = base64.b64decode(blob_data)
+    # file_path = os.path.join(source_folder, r"Codeshastra X\backend\uploaded_audios", blob_data.filename)
+    # full_file_path = f"{source_folder}/Codeshastra X/backend/uploaded_audios/{blob_data.filename}"
+    file_path = "backend/uploaded_audios/" + blob_data.filename
+    blob_data.save(file_path)
+    print(file_path)
+    # audio_seg = AudioSegment.from_file(file_path, format="wav")
     
-    # Convert blob data to AudioSegment
-    audio_seg = AudioSegment.from_file(io.BytesIO(audio_data), format='wav')
     
-    model_path = "backend/audio_classification_model.h5"
+    
+    model_path = r"backend\audio_classification_model.h5"
     model = load_model(model_path)
     
-    prediction = classify_audio(audio_seg, model)
+    full_file_path = "backend\\uploaded_audios\\" + blob_data.filename
+    
+    prediction = classify_audio(full_file_path, model)
     print(prediction)
     
     return jsonify({"classification": prediction}), 200
