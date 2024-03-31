@@ -5,7 +5,7 @@
    
         width: 30vw;
         height:auto;
-        background-color: transparent !important;
+        background-color: rgb(0 0 0 / 51%) !important;
         padding: 3em;
         /* display: flex;
         flex-direction: column;
@@ -62,6 +62,14 @@
 {
     color:rgb(2, 2, 2) !important;
     background-color: white !important;
+    font-size: large !important;
+    font-weight: bolder !important;
+    width:  20vw !important;
+    border-radius: 5px;
+    margin-top: 1em;
+    height: 6vh !important
+    /* margin-left: 11% */
+    
 
 
 }
