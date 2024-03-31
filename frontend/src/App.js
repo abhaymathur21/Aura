@@ -12,6 +12,8 @@ import Initial from './Pages/Initial/Initial';
 import WakeWordDetector from './Pages/Initial/Initial2';
 import Dashboard from './Pages/Dashboard/Dashboard.js';
 import Profile from './Pages/Profile/Profile.js';
+import Recorder from './Pages/Recorder.js';
+
 
 
 
@@ -32,6 +34,8 @@ function App() {
         <Route path='/initial' element={<Initial/>}/>
         <Route path='/dashboard' element={<Dashboard/>}/>
         <Route path='/profile' element={<Profile/>}/>
+        <Route path='/recorder' element={<Recorder/>}/>
+
         
 
 
