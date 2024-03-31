@@ -45,7 +45,7 @@ const Login = () => {
                     })
                     .then((res) => {
                         setProfile(res.data);
-                        navigate('/')
+                        navigate('/dashboard')
                     })
                     .catch((err) => console.log(err));
             }
@@ -63,21 +63,21 @@ const Login = () => {
                     text: 'Please Fill All fields',
                 })
             }else{
-                const response = await axios.post("http://localhost:8000/user/login",{
-                    email,
-                    password
-                });
-                localStorage.setItem("token",response.data.token)
-                if(response.status == 200){
-                    navigate('/lawyers')  
-                }
-                else{
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Invalid Login Credentials',
-                    })
-                }
+                // const response = await axios.post("http://localhost:8000/user/login",{
+                //     email,
+                //     password
+                // });
+                // localStorage.setItem("token",response.data.token)
+                // if(response.status == 200){
+                    navigate('/dashboard')  
+                // }
+                // else{
+                    // Swal.fire({
+                    //     icon: 'error',
+                    //     title: 'Oops...',
+                    //     text: 'Invalid Login Credentials',
+                    // })
+                // }
             }
         }catch(err){
             console.log(err)
@@ -122,7 +122,7 @@ const Login = () => {
                         }}>
                             email:
                         </Typography>
-                        <TextField fullWidth className='text-field' onChange={(e)=>setEmail(e.target.value)}>
+                        <TextField fullWidth className='text-field' InputProps={{ style: { color: 'white' } }}  onChange={(e)=>setEmail(e.target.value)}>
                         </TextField>
                         <Typography variant='h6' sx={{
                             marginTop: '1em',
@@ -133,7 +133,7 @@ const Login = () => {
                         }}>
                             password:
                         </Typography>
-                        <TextField fullWidth className='text-field' onChange={(e)=>setPassword(e.target.value)}>
+                        <TextField fullWidth className='text-field'InputProps={{ style: { color: 'white' } }}  onChange={(e)=>setPassword(e.target.value)}>
                         </TextField>
                         <Typography variant='h6' sx={{
                     marginTop: '1em',
@@ -158,7 +158,7 @@ const Login = () => {
                                 
 
                             }}>
-                                Not registered ? <Link to='/sign-up' className='link-sign' > <u>Sign up</u></Link>
+                                Not registered ? <Link to='/signup' className='link-sign' > <u>Sign up</u></Link>
 
                             </Typography>
                         </Box>

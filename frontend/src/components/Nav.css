@@ -10,3 +10,17 @@
     margin-left: auto;
 }
 
+
+.button
+{
+    background-color: black !important;
+    margin-left: auto;
+    
+}
+.dash-button:active
+{
+    border: none !important;
+    margin-left: auto;
+}
+
+

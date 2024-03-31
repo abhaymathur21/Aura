@@ -10,6 +10,10 @@ import Spline from '@splinetool/react-spline';
 import './Profile.css'
 import DeleteIcon from '@mui/icons-material/Delete';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import { useNavigate } from 'react-router-dom';
+
+
 
 const txtStyle = {
     //  fontFamily: 'Montserrat',
@@ -24,6 +28,11 @@ const txtStyle = {
     color:"white"
   };
 const Profile = () => {
+  const navigate = useNavigate();
+  const handleFile = () =>
+  {
+    navigate('/dashboard')
+  }
   return (
     
     <Box sx={{backgroundColor:'black', minHeight: '100vh'}}>
@@ -32,7 +41,14 @@ const Profile = () => {
         </Box>
         <Box style={{ zIndex: 1, position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
         <NavDash/>
-        <Box sx={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center'}}>
+        <Box sx={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center', marginTop:'1em'}}>
+                  <Button
+                    size="40rem"
+                    sx={{color:'white',marginRight: 'auto', marginLeft:'3em'}}
+                    onClick={handleFile}
+                  >
+                    <ArrowBackIosNewIcon color='white' fontSize='large'/>
+                  </Button>
             <Typography variant='h4' sx={{color:'white',marginBottom:'1em'}}>Your <span>Profile</span></Typography>
 
             <Card

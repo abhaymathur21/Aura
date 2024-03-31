@@ -70,36 +70,37 @@ const Sign = () => {
     console.log(profile)
     const handleRegister = async() =>{
         try{
-            if(!email||!password){
+            if(!email||!password||!name||!location){
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
                     text: 'Please Fill All fields',
                 })
             }else{
-                const response = await axios.post("http://localhost:8000/user/register",{
-                    name,
-                    location,
-                    email,
-                    password
-                });
-                if(response.status == 201){
-                    setTimeout(() => {
-                        navigate('/voice-initial')  
-                    }, 1500);
+                // const response = await axios.post("http://localhost:8000/user/register",{
+                //     name,
+                //     location,
+                //     email,
+                //     password
+                // });
+                // if(response.status == 201){
+                //     setTimeout(() => {
+                //         navigate('/voice-initial')  
+                //     }, 1500);
+                    navigate('/recorder')
                     Swal.fire(
                         'YAYY!',
                         'Successful Registration',
                         'success'
                     )
-                }
-                else{
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Something went wrong!',
-                    })
-                }
+                //     }
+                // else{
+                //     Swal.fire({
+                //         icon: 'error',
+                //         title: 'Oops...',
+                //         text: 'Something went wrong!',
+                //     })
+                // }
             }
         }catch(err){
             console.log(err);

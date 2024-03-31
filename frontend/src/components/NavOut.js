@@ -1,3 +1,4 @@
+import React from 'react'
 import { Navbar } from 'flowbite-react'
 import { NavbarBrand } from 'flowbite-react/lib/esm/components/Navbar/NavbarBrand'
 // import '../pages/Home/Home.css'
@@ -11,15 +12,13 @@ import { NavbarToggle } from 'flowbite-react/lib/esm/components/Navbar/NavbarTog
 import { useNavigate } from 'react-router-dom'
 import { useState,useRef } from 'react'
 
-// import GavelIcon from '@mui/icons-material/Gavel';
-export default function Nav() {
-  const navigate = useNavigate();
+const NavOut = () => {
+    const navigate = useNavigate();
 
 const handlebutton = ()=>
 {
-    navigate('/login')
+    navigate('/')
 }
-
   return (
     <Navbar
     fluid
@@ -86,3 +85,5 @@ const handlebutton = ()=>
   </Navbar>
   )
 }
+
+export default NavOut
