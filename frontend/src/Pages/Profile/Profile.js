@@ -12,6 +12,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useNavigate } from 'react-router-dom';
+import NavOut from '../../components/NavOut';
 
 
 
@@ -40,7 +41,7 @@ const Profile = () => {
         <Spline scene="https://prod.spline.design/abI9MJcWPEXkLkxT/scene.splinecode" className='animation' />
         </Box>
         <Box style={{ zIndex: 1, position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
-        <NavDash/>
+        <NavOut/>
         <Box sx={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center', marginTop:'1em'}}>
                   <Button
                     size="40rem"

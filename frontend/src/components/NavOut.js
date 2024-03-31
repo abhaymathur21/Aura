@@ -12,6 +12,9 @@ import { NavbarToggle } from 'flowbite-react/lib/esm/components/Navbar/NavbarTog
 import { useNavigate } from 'react-router-dom'
 import { useState,useRef } from 'react'
 
+import LogoutIcon from '@mui/icons-material/Logout';
+import { Link } from 'react-router-dom'
+
 const NavOut = () => {
     const navigate = useNavigate();
 
@@ -76,12 +79,9 @@ const handlebutton = ()=>
       </NavbarLink>
      
     </NavbarCollapse>
-    <Button className='button'
-      style={{
-          width:100
-      }} onClick={handlebutton}>
-        Login
-      </Button>
+    <Button  className='dash-button' as={Link} to='/'>
+           <LogoutIcon color='white'/>
+          </Button>
   </Navbar>
   )
 }
