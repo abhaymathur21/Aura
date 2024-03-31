@@ -7,10 +7,16 @@ import Nav from '../../components/Nav';
 import Typewriter from 'typewriter-effect';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import './Home.css'
-
+import { useNavigate } from 'react-router-dom'
 
 
 const Home = () => {
+  const navigate = useNavigate();
+
+const handlebutton = ()=>
+{
+    navigate('/signup')
+}
   return (
 <Box sx={{backgroundColor:'black'}}>
     <Nav/>
@@ -32,7 +38,7 @@ const Home = () => {
             .start();
         }}
       /><Box  sx={{ marginTop: '1rem' }}>
-          <Button className='signup' variant="contained" color="primary" endIcon={<ArrowForwardIcon />}>
+          <Button className='signup' variant="contained" color="primary" endIcon={<ArrowForwardIcon />} onClick={handlebutton}>
             Sign Up
           </Button>
         </Box>
