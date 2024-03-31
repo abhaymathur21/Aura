@@ -7,6 +7,7 @@ import os
 import json
 from dotenv import load_dotenv
 import asyncio
+import requests
 
 load_dotenv()
 
@@ -144,6 +145,58 @@ def llm_model(input_string, chat_history):
             
         elif task == "api call":
             print(response.text)
+            
+            task_type = response.text.split(",")[1].strip()
+            print(task_type)
+            if task_type == "news":
+                
+                # prompt = [
+                #     """
+                #     """
+                # ]
+                
+                country_code = "in"
+                
+                params = {
+                    "country": country_code,
+                    "apiKey": os.environ["NEWS_API_KEY"],
+                }
+
+                url = "https://newsapi.org/v2/top-headlines"
+
+                response = requests.get(url, params=params)
+
+                if response.status_code == 200:
+                    data = response.json()
+                    # Process the data as needed
+                    articles = data['articles']
+                    article_string = "Here are the top headlines:\n\n"
+                    for article in articles:
+                        try:
+                            print(article['title'])
+                            article_string+=article['title']+"\n"
+                        except:
+                            print("")
+                else:
+                    print("Failed to retrieve headlines:", response.status_code)
+                print(article_string)
+                return article_string
+            elif task_type == "weather":
+                
+                location =
+                url = f"http://api.openweathermap.org/data/2.5/weather?q={location}&appid={api_key}&units=metric"
+                response = requests.get(url)
+                if response.status_code == 200:
+                    data = response.json()
+                    temp = data["main"]
+                    print("Temperature: ",temp)
+                    temp = data["weather"]
+                    print("Weather: ",temp)
+                else:
+                    raise Exception(f"Failed to fetch temperature data: {response.text}")
+                
+                return "Here is the current weather forecast"
+            
             return response.text
             
         elif task == "calendar function":
@@ -181,7 +234,7 @@ def llm_model(input_string, chat_history):
             
             print(tasks)
             
-            output = "Sorry, I cannot perform that task. But here are the 3 most relevant tasks I can perform based on your input: \n\n1. "+task[0]+"\n2. "+task[1]+"\n3. "+task[2]
+            output = "Sorry, I cannot perform that task. But here are the 3 most relevant tasks I can perform based on your input: \n\n1. "+tasks[0]+"\n2. "+tasks[1]+"\n3. "+tasks[2]
             
             # tasks_json = json.loads("{"+"task1:"+tasks[0]+", task2:"+tasks[1]+", task3:"+tasks[2]+"}")
             

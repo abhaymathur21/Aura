@@ -133,6 +133,7 @@ const Sign = () => {
         justifyContent: 'center',
         alignItems: 'center',
         margin: '1em',
+        
     }}>
         <Paper elevation={3} className='paper-sign' style={{ zIndex: 1, position: 'relative' }}>
             <Box style={{ zIndex: 1, position: 'relative' }}>
