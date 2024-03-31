@@ -111,7 +111,7 @@ export default function App() {
                             Input a voice audio file
                         </Typography>
                         </Box>
-                        <input type="file" name="file" id="file" style={{marginLeft:'7.5em'}} />
+                        <input type="file" name="file" id="file" style={{marginLeft:'5em'}} />
                         
                        
                         

@@ -135,13 +135,14 @@ const Sign = () => {
         margin: '1em',
         
     }}>
-        <Paper elevation={3} className='paper-sign' style={{ zIndex: 1, position: 'relative' }}>
+        <Paper elevation={3} className='paper-sign' style={{ zIndex: 1, position: 'relative', marginTop:'10em' }}>
             <Box style={{ zIndex: 1, position: 'relative' }}>
                 <Box display="flex" flexDirection="column" alignItems="center" >
                     <Typography variant='h3'  style={{
                         alignSelf: 'center',
                         fontWeight: 'bolder',
                         color: 'white',
+                        fontSize:'1.5em'
                     
                     }}>
                         Sign Up
@@ -150,42 +151,51 @@ const Sign = () => {
                 <Typography variant='h6' sx={{
                     marginTop: '1em',
                     fontWeight: '600',
-                    color:'white'
+                    color:'white',
+                    fontSize:'1em'
                 }}>
                 Name:
                 </Typography>
-                <TextField fullWidth className='text-field' InputProps={{ style: { color: 'white' } }}  onChange={e => setName(e.target.value)} />
+                <TextField fullWidth className='text-field' InputProps={{ style: { color: 'white' } }}  onChange={e => setName(e.target.value)}  size='small'/>
                 <Typography variant='h6' sx={{
                     marginTop: '1em',
                     fontWeight: '600',
-                    color:'white'
+                    color:'white',
+                    fontSize:'1em'
+
                 }}>
                     Location:
                 </Typography>
-                <TextField fullWidth className='text-field'InputProps={{ style: { color: 'white' } }}  onChange={e => setLocation(e.target.value)} />
+                <TextField fullWidth className='text-field'InputProps={{ style: { color: 'white' } }}  onChange={e => setLocation(e.target.value)} size='small' />
                 <Typography variant='h6' sx={{
                     marginTop: '1em',
                     fontWeight: '600',
-                    color:'white'
+                    color:'white',
+                    fontSize:'1em'
+
                 }}>
                     Email:
                 </Typography>
-                <TextField fullWidth className='text-field' InputProps={{ style: { color: 'white' } }}  onChange={e => setEmail(e.target.value)} />
+                <TextField fullWidth className='text-field' InputProps={{ style: { color: 'white' } }}  onChange={e => setEmail(e.target.value)} size='small'/>
                 <Typography variant='h6' sx={{
                     marginTop: '1em',
                     fontWeight: '600',
-                    color:'white'
+                    color:'white',
+                    fontSize:'1em'
+
                 }}>
                     Password:
                 </Typography>
-                <TextField fullWidth className='text-field' InputProps={{ style: { color: 'white' } }}  onChange={e => setPassword(e.target.value)} />
+                <TextField fullWidth className='text-field' InputProps={{ style: { color: 'white' } }}  onChange={e => setPassword(e.target.value)} size='small' />
 
                 <Typography variant='h6' sx={{
                     marginTop: '1em',
                     fontWeight: '600',
                     color:'white',
                     marginLeft:'50%',
-                    marginRight: 'auto'
+                    marginRight: 'auto',
+                    fontSize:'1em'
+
 
                 }}>
                     OR

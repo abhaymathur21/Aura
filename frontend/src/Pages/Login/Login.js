@@ -102,13 +102,15 @@ const Login = () => {
         margin: '1em',
     }}>
 
-                <Paper elevation={3} className='paper' style={{ zIndex: 1, position: 'relative' }} >
+                <Paper elevation={3} className='paper' style={{ zIndex: 1, position: 'relative' , marginTop:'10em'}} >
                     <Box  >
                         <Box display="flex" flexDirection="column" alignItems="center">
-                            <Typography variant='h3' style={{
+                            <Typography variant='h4' style={{
                                 alignSelf: 'center',
                                 // fontStyle:'italic',
                                 fontWeight: 'bolder',
+                                fontSize:'2em',
+                                
                                 color: 'white'
                             }}>
                                 Login
@@ -117,23 +119,25 @@ const Login = () => {
                         <Typography variant='h6' sx={{
                             marginTop: '1em',
                             fontWeight: '600',
-                            color: 'white'
+                            color: 'white',
+                            fontSize:'1em',
 
                         }}>
                             email:
                         </Typography>
-                        <TextField fullWidth className='text-field' InputProps={{ style: { color: 'white' } }}  onChange={(e)=>setEmail(e.target.value)}>
+                        <TextField fullWidth className='text-field' InputProps={{ style: { color: 'white' } }}  onChange={(e)=>setEmail(e.target.value)} size='small'>
                         </TextField>
                         <Typography variant='h6' sx={{
                             marginTop: '1em',
                             fontWeight: '600',
-                            color: 'white'
+                            color: 'white',
+                            fontSize:'1em',
 
 
                         }}>
                             password:
                         </Typography>
-                        <TextField fullWidth className='text-field'InputProps={{ style: { color: 'white' } }}  onChange={(e)=>setPassword(e.target.value)}>
+                        <TextField fullWidth className='text-field'InputProps={{ style: { color: 'white' } }}  onChange={(e)=>setPassword(e.target.value)} size='small'>
                         </TextField>
                         <Typography variant='h6' sx={{
                     marginTop: '1em',
@@ -151,7 +155,7 @@ const Login = () => {
                                 Login
                             </Button>
                             <Typography style={{
-                                fontSize: '15px',
+                                fontSize: '12px',
                                 marginTop: '1em',
                                 fontWeight: 'bold',
                             color: 'white'

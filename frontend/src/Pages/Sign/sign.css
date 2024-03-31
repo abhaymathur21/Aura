@@ -28,11 +28,13 @@
     background-color: #D6E6F2 !important;
     margin-top: 1em;
     color:#0c0a3c !important;
-    font-size: large !important;
+    font-size: 1em !important;
     font-weight: bolder !important;
     width:  20vw !important;
     border-radius: 5px;
     height: 6vh !important
+
+    
 
 
     
@@ -62,7 +64,7 @@
 {
     color:rgb(2, 2, 2) !important;
     background-color: white !important;
-    font-size: large !important;
+    font-size: 0.75em !important;
     font-weight: bolder !important;
     width:  20vw !important;
     border-radius: 5px;
