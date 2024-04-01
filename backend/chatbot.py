@@ -3,6 +3,7 @@ from functionalities.math_autogen import autogen_math
 from functionalities.web_search import scrape_google_search
 from functionalities.email_task import send_email, display_mails, auth
 from functionalities.calendar_task import authenticate, top_ten, add_event, delete_event_by_name, update_event
+from functionalities.spotify_task import play_song
 
 import google.generativeai as genai
 import os
@@ -98,6 +99,9 @@ def llm_model(input_string, chat_history, location):
             if user specifically asks to search the web for something:
             identify prompt to search
             output format: 'web search', prompt
+            
+            if user wants you to play a song:
+            output format: 'play song', song_name
             
             if none of the above tasks apply, but you think the user is still asking for a task to completed:
             output the 3 most relevant tasks from the above list of tasks you are able to identify based on the user input task. 
@@ -270,6 +274,15 @@ def llm_model(input_string, chat_history, location):
             final_response = llm_response.text + "\n\n" + "Here is what I found on the web for you:\n" 
                     
             return f"{final_response}, {links[0]}"
+        
+        elif task == "play song":
+            print(response.text)
+            
+            song_name = response.text.split(",")[1].strip()
+            
+            play_song(song_name)
+            
+            return "Your song is being played!"
         
         elif task == "multi":
             print(response.text)
