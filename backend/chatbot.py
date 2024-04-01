@@ -102,7 +102,7 @@ def llm_model(input_string, chat_history, location):
             output format: 'web search', prompt
             
             if user wants you to play a song:
-            output format: 'play song', song_name
+            output format: 'play song', song name along with singer name if possible
             
             if none of the above tasks apply, but you think the user is still asking for a task to completed:
             output the 3 most relevant tasks from the above list of tasks you are able to identify based on the user input task. 
