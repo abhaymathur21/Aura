@@ -4,6 +4,7 @@ from functionalities.web_search import scrape_google_search
 from functionalities.email_task import send_email, display_mails, auth
 from functionalities.calendar_task import authenticate, top_ten, add_event, delete_event_by_name, update_event
 from functionalities.spotify_task import play_song
+from functionalities.whatsapp import send_message
 
 import google.generativeai as genai
 import os
@@ -86,7 +87,7 @@ def llm_model(input_string, chat_history, location):
             
             if the user asks to send a text message:
             identify the message and the receiver
-            output format: 'text message', message, receiver
+            output format: 'text message', message
             
             if user asks for current news or weather:
             identify api_type: 'news', 'weather'
@@ -158,6 +159,10 @@ def llm_model(input_string, chat_history, location):
                         
         elif task == "text message":
             print(response.text)
+            
+            message = response.text.split(",")[1].strip()
+            send_message(message)
+            
             return response.text
             
         elif task == "api call":
