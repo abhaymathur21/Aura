@@ -1,6 +1,8 @@
 from functionalities.autogen_code import autogen_command
 from functionalities.math_autogen import autogen_math
 from functionalities.web_search import scrape_google_search
+from functionalities.email_task import send_email, display_mails, auth
+from functionalities.calendar_task import authenticate, top_ten, add_event, delete_event_by_name, update_event
 
 import google.generativeai as genai
 import os
@@ -51,9 +53,7 @@ def llm_model(input_string, chat_history, location):
         You are a helpful chatbot. You talk to the user and help them with their queries.
         This is the user's input: {input_string}
         
-        Here is the user's chat history with you: {chat_history}
-
-        Figure out whether the above user input is a task that the user wants you to do or if it is a question that can be answered given the chat history above. If it is a task, output "task". If it is a question answerable by chat history, output "chat".
+        Figure out whether the above user input is a task that the user wants you to do or if it is just a chat. If it is a task, output "task". If it is a chat, output "chat".
 
         Output of this prompt should be in string format only with the output being either "task" or "chat".
         
@@ -78,9 +78,10 @@ def llm_model(input_string, chat_history, location):
             output format: 'command execution', input_string
             
             if the user asks to send an email:
-            identify task_type: 'send', 'delete', 'check_inbox'
-            in case of task_type 'send', identify the message and receiver
-            output format:'email', task_type, message (if any), receiver (if any)
+            output format:'send email'
+            
+            if the user asks to check their emails:
+            output_format: "check email
             
             if the user asks to send a text message:
             identify the message and the receiver
@@ -91,8 +92,8 @@ def llm_model(input_string, chat_history, location):
             output format: 'api call', api_type
             
             if user asks to edit their schedule (example: add or delete tasks for a day or hour, etc):
-            identify task_type based on context: "new event", "delete event", "check events", "edit event", "check date" 
-            output format: 'calendar function', task_type
+            identify task_type based on context: "create event", "delete event", "update event","check events"
+            output format: 'calendar function', task_type, event name, start_datetime in YYYY-MM-DDTHH:MM:SSZ format in Indian Standard Time, end_datetime in YYYY-MM-DDTHH:MM:SSZ format in Indian Standard Time
             
             if user specifically asks to search the web for something:
             identify prompt to search
@@ -135,10 +136,22 @@ def llm_model(input_string, chat_history, location):
             
             return output
             
-        elif task == "email":
-            print(response.text)
-            return response.text
+        elif task == "send email":
+            recipient_email = input("Enter the recipient's email address: ")
+            subject = input("Enter the subject of the email: ")
+            message = input("Enter the body of the email: ")
             
+            send_email(recipient_email, subject, message)
+            
+            print(response.text)
+            return "Mail sent!"
+        
+        elif task == "check email":
+            service = auth()
+            display_mails(service)
+            print(response.text)
+            return "Mails have been displayed in terminal"
+                        
         elif task == "text message":
             print(response.text)
             return response.text
@@ -173,13 +186,13 @@ def llm_model(input_string, chat_history, location):
                     article_string = "Here are the top headlines:\n\n"
                     for article in articles:
                         try:
-                            print(article['title'])
+                            # print(article['title'])
                             article_string+=article['title']+"\n"
                         except:
                             print("")
                 else:
                     print("Failed to retrieve headlines:", response.status_code)
-                print(article_string)
+                # print(article_string)
                 return article_string
             elif task_type == "weather":
                 api_key = os.environ["WEATHER_API_KEY"]
@@ -190,16 +203,51 @@ def llm_model(input_string, chat_history, location):
                     data = response.json()
                     temp = data["main"]
                     print("Temperature: ",temp)
-                    temp = data["weather"]
+                    temperature = temp["temp"]
+                    feels_like = temp["feels_like"]
+                    
+                    weath = data["weather"]
                     print("Weather: ",temp)
+                    weather = weath[0]["main"]
                 else:
                     raise Exception(f"Failed to fetch temperature data: {response.text}")
                 
-                return "Here is the current weather forecast"
+                return "The temperature is "+str(temperature)+"°C but it feels like "+str(feels_like)+"°C. The weather is "+weather
             
             return response.text
             
         elif task == "calendar function":
+            
+            task_type = response.text.split(",")[1].strip()
+            service = authenticate()
+            if task_type == "create event":
+                event_name = response.text.split(",")[2].strip()
+                start_datetime = response.text.split(",")[3].strip()
+                end_datetime = response.text.split(",")[4].strip()
+                
+                add_event(service, event_name, start_datetime, end_datetime=end_datetime, is_all_day=False)
+                
+                return "Event added successfully"
+
+            elif task_type == "delete event":
+                event_name = response.text.split(",")[2].strip()
+                delete_event_by_name(service, event_name)
+                
+                return "Event deleted successfully"
+            
+            elif task_type == "update event":
+                event_name = response.text.split(",")[2].strip()
+                start_datetime = response.text.split(",")[3].strip()
+                end_datetime = response.text.split(",")[4].strip()
+                update_event(service, event_name, new_start_datetime=start_datetime, end_datetime=end_datetime)
+                
+                return "Event updated successfully"
+                
+            elif task_type == "check events":
+                top_ten(service)
+                
+                return "Events displayed in terminal"
+  
             print(response.text)
             return response.text
         
@@ -219,9 +267,9 @@ def llm_model(input_string, chat_history, location):
             
             llm_response = model.generate_content(prompt)
             
-            final_response = llm_response.text + "\n\n" + "Here are the top 5 results from the web:\n-" + "\n- ".join(links)
+            final_response = llm_response.text + "\n\n" + "Here is what I found on the web for you:\n" 
                     
-            return final_response
+            return f"{final_response}, {links[0]}"
         
         elif task == "multi":
             print(response.text)

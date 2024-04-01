@@ -6,6 +6,7 @@
     padding: 2em;
     z-index: 1 !important;
     position: relative;
+    padding-bottom: 20vh;
 }
 
 .footer-container {

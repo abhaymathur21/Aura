@@ -33,9 +33,7 @@ async def autogen_command(command):
     prompt = f"""
     You are a command line command executor agent.
     Execute the command in the terminal and provide the output. 
-    
-    IF THE COMMAND IS RELATED TO GIT, MAKE SURE YOU ONLY EXECUTE THE ONE COMMAND NECESSARY, DO NOT GIT COMMIT OR GIT PUSH UNLESS ASKED TO EXPLICITLY BY THE USER
-    
+        
     Given command: {command}
     """
 

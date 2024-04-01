@@ -4,7 +4,7 @@ import numpy as np
 # from keras.models import load_model
 import io
 
-classes = ["Abhay", "Aditya", "Shreya"]
+classes = ["Aditya", "Abhay", "Shreya"]
 
 # def extract_features(audio_seg):
 #     # Convert AudioSegment to bytes using io.BytesIO

@@ -73,7 +73,7 @@ def update_person(userID):
     query = {"personName": personName} #personID is a global variable that is set every time voice is recognized
     
     document = collection.find_one(query)
-    print(document)
+    # print(document)
     if document:
         # Update the fields of the document
         # document["personName"] = data["personName"] if data["personName"] else document["personName"]
@@ -232,8 +232,10 @@ def llm_chatbot(userID):
 
     
     response = llm_model(input_string, chat_history, location)
+    message = response.split(",")[0]
+    url = response.split(",")[1] if len(response.split(",")) > 1 else ""
     # print(response)
-    return jsonify({"data":response})
+    return jsonify({"data":{"data":message, "url":url}})
     
 
 if __name__ == '__main__':

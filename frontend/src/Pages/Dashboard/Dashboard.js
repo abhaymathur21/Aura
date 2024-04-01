@@ -174,7 +174,9 @@ const Dashboard = () => {
       setInput(transcript)
     }
 
-    if (input != "") {
+    // if (input != "")
+    else
+     {
       console.log("sending message");
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -194,10 +196,13 @@ const Dashboard = () => {
         )
         .then((res) => {
           console.log("response Text", res.data);
-
+          if (res.data.data.url)
+          {
+            window.open(res.data.data.url, "_blank");
+          }
           setMessages((prevMessages) => [
             ...prevMessages,
-            { user: "agent", message: res.data.data },
+            { user: "agent", message: res.data.data.data },
           ]);
         })
         .catch((err) => {
