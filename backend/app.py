@@ -21,7 +21,7 @@ uri = "mongodb+srv://abhaymathur21:itsmeright@codeshastra.lxorakw.mongodb.net/?r
 # Create a new client and connect to the server
 client = MongoClient(uri)
 db = client["Accounts"]
-source_folder = r"C:\Users\a21ma\OneDrive\Desktop"
+source_folder = r"C:\Users\a21ma\OneDrive\Desktop\Code\Projects" # add this to .env file later or automatically detect the path using os module
 # source_folder = "C:/Users/a21ma/OneDrive/Desktop"
 
 #define a global variable for personID every time voice is recognized
